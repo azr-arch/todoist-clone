@@ -21,7 +21,7 @@ export async function POST(request: Request) {
 
     switch (body.type) {
         case "user.created":
-            await prisma.user.create({
+            await prismaDb.user.create({
                 data: {
                     id: body.data.id,
                     firstName: body.data.first_name,
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
             });
             return new Response("User created");
         case "user.updated":
-            await prisma.user.update({
+            await prismaDb.user.update({
                 where: {
                     id: body.data.id,
                 },
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
             });
             return new Response("User updated");
         case "user.deleted":
-            await prisma.user.delete({
+            await prismaDb.user.delete({
                 where: {
                     id: body.data.id,
                 },

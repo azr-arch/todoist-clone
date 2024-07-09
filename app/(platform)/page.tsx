@@ -1,9 +1,11 @@
+import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function Page() {
     return (
-        <div className="w-full  ">
+        <div className="w-full h-full max-w-screen-xl mx-auto bg-main p-6 ">
+            <Header />
             <div className="space-y-3 max-w-xl text-center mx-auto">
                 <h1 className="text-[5vw] font-medium leading-[1.1]">
                     Organize Your Tasks Efficiently
