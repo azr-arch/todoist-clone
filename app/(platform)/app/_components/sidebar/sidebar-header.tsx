@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
     Menubar,
     MenubarItem,
@@ -7,7 +8,8 @@ import {
     MenubarSeparator,
     MenubarTrigger,
 } from "@/components/ui/menubar";
-import { useUser } from "@clerk/nextjs";
+import { cn } from "@/lib/utils";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import { MenubarContent } from "@radix-ui/react-menubar";
 import { Activity, ChevronDown, LogOut, Plus, Settings } from "lucide-react";
 import Image from "next/image";
@@ -31,10 +33,6 @@ const menuItems = [
         href: "/app/activity",
         value: "Activity",
         icon: <Activity className={iconStyles} />,
-    },
-    {
-        value: "Log out",
-        icon: <LogOut className={iconStyles} />,
     },
 ];
 
@@ -81,6 +79,19 @@ export const SidebarHeader = () => {
                                     </MenubarItem>
                                 );
                             })}
+
+                            {/* Todo: bug when logout (page not found error ) */}
+                            <MenubarItem>
+                                <SignOutButton redirectUrl="/">
+                                    <Button
+                                        variant={"ghost"}
+                                        className="px-0 py-0 h-fit text-main font-normal"
+                                    >
+                                        <LogOut className={cn("mr-2", iconStyles)} />
+                                        Log out
+                                    </Button>
+                                </SignOutButton>
+                            </MenubarItem>
                         </MenubarContent>
                     </MenubarMenu>
                 </Menubar>

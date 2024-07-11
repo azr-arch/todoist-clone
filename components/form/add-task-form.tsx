@@ -13,12 +13,12 @@ const initialState = {
     message: null,
 };
 
-export const AddTaskForm = () => {
+export const AddTaskForm = ({ onClose }: { onClose: () => void }) => {
     const [state, formAction] = useFormState(addTask, initialState);
     const pathname = usePathname();
 
     return (
-        <div className="w-full rounded-md border-muted border min-h-[158px] ">
+        <div className="w-full rounded-md border-neutral-300 border min-h-[158px] ">
             <form action={formAction} className="w-full h-full">
                 <div className="p-2 flex flex-col items-start w-full">
                     <input
@@ -35,9 +35,9 @@ export const AddTaskForm = () => {
                     </div>
                 </div>
 
-                <Separator className="my-2 w-full bg-muted" />
+                <Separator className="my-1 w-full bg-muted" />
 
-                <div className="px-2 py-1 flex items-center justify-between">
+                <div className="px-2 pt-1 pb-2 flex items-center justify-between">
                     {/* Project DropDown menu */}
                     <input
                         name="sectionType"
@@ -46,7 +46,9 @@ export const AddTaskForm = () => {
                     />
 
                     <div className="ml-auto space-x-2">
-                        <Button variant={"secondary"}>Cancel</Button>
+                        <Button onClick={onClose} variant={"outline"}>
+                            Cancel
+                        </Button>
                         <SubmitButton />
                     </div>
                 </div>
