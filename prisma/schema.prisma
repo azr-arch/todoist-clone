@@ -14,14 +14,17 @@ datasource db {
 }
 
  
-model User {
+model Task {
   id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  clerkId   String
+  clerkUserId   String
   email     String   @unique
-  firstName String
-  lastName  String
-  imageUrl  String
-  userName  String?
+
+  title     String
+  description String?
+  dueDate      DateTime?
+  // Add assignee, priority, reminders, label, location (its for premium usrs on og site) columns
+  sectionType    String
+ 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

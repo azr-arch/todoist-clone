@@ -1,3 +1,4 @@
+import { AddTaskForm } from "@/components/form/add-task-form";
 import { Plus } from "lucide-react";
 
 const TodayPage = () => {
@@ -10,7 +11,8 @@ const TodayPage = () => {
             </div>
 
             <div>
-                <AddTaskButton />
+                {/* <AddTaskButton /> */}
+                <AddTaskForm />
             </div>
         </div>
     );
