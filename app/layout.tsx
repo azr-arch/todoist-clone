@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Kanit } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 
 const kanit = Kanit({ weight: ["300", "400", "500", "600", "700"], subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({
         <ClerkProvider>
             <html lang="en">
                 <body className={kanit.className}>{children}</body>
+                <Toaster />
             </html>
         </ClerkProvider>
     );

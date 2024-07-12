@@ -9,61 +9,64 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useRef, useState } from "react";
 
-// Todo: Left here
-export function DatePickerDemo() {
+// Todo: implement a way to use default value
+export function DatePickerDemo({ defaultValue }: { defaultValue?: string }) {
     const [date, setDate] = useState<Date>();
+    const dateRef = useRef<null | HTMLInputElement>(null);
 
     const handleClear = () => setDate(undefined);
-    const dateRef = useRef<null | string>(null);
-
-    const handleChangeDateRef = () => {
-        if (date) {
-        }
-    };
 
     return (
-        <Popover>
-            <PopoverTrigger asChild>
-                <Button
-                    variant={"outline"}
-                    className={cn(
-                        "w-fit justify-start text-left font-normal",
-                        !date && "text-muted-foreground"
-                    )}
-                >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? (
-                        format(date, "PPP")
-                    ) : (
-                        <span className="text-sm font-thin">Due date</span>
-                    )}
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-                <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={(day) => {
-                        if (!day) return;
-
-                        setDate(day);
-                        dateRef.current = format(day, "yyyy-MM-dd");
-                    }}
-                    initialFocus
-                />
-                <input type="hidden" value={dateRef.current!} name="dueDate" />
-
-                {date && (
+        <>
+            <input
+                type="hidden"
+                ref={dateRef}
+                // value={date ? date.toDateString() : ""} // Convert date to ISO string or provide an empty string
+                name="dueDate" // Optional: Set a name for form submission
+            />
+            <Popover>
+                <PopoverTrigger asChild>
                     <Button
-                        variant="outline"
-                        onClick={handleClear}
-                        className="mt-2 ml-1 mb-1 text-sm text-destructive"
-                        size={"sm"}
+                        variant={"outline"}
+                        className={cn(
+                            "w-fit justify-start text-left font-normal",
+                            !date && "text-muted-foreground"
+                        )}
                     >
-                        <X className="w-4 h-4 mr-1" /> Clear
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? (
+                            format(date, "PPP")
+                        ) : (
+                            <span className="text-sm font-thin">Due date</span>
+                        )}
                     </Button>
-                )}
-            </PopoverContent>
-        </Popover>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                    <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={(day) => {
+                            setDate(day);
+
+                            if (dateRef.current && day) {
+                                dateRef.current.value = day.toDateString();
+                            }
+                        }}
+                        initialFocus
+                    />
+
+                    {date && (
+                        <Button
+                            variant="outline"
+                            onClick={handleClear}
+                            className="mt-2 ml-1 mb-1 text-sm text-destructive"
+                            size={"sm"}
+                        >
+                            <X className="w-4 h-4 mr-1" /> Clear
+                        </Button>
+                    )}
+                </PopoverContent>
+            </Popover>
+        </>
     );
 }
