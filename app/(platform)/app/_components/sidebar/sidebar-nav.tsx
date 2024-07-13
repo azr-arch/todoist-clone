@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { CalendarDays, CalendarFold, Inbox, PlusCircle } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const iconStyles = "w-5 h-5";
@@ -41,7 +42,7 @@ export const SidebarNav = () => {
                     <li
                         key={idx}
                         className={cn(
-                            "flex items-center gap-x-2 px-2.5 py-1.5  rounded-sm transition hover:bg-neutral-100 cursor-pointer duration-150 text-main font-thin",
+                            " px-2.5 py-1.5  rounded-sm transition hover:bg-neutral-100 cursor-pointer duration-150 text-main font-thin",
                             `${
                                 item.active
                                     ? "bg-orange-100 text-orange-700 hover:bg-orange-100"
@@ -49,8 +50,10 @@ export const SidebarNav = () => {
                             }`
                         )}
                     >
-                        {item.icon}
-                        <p>{item.value}</p>
+                        <Link href={item.href} className="flex items-center gap-x-2">
+                            {item.icon}
+                            <p>{item.value}</p>
+                        </Link>
                     </li>
                 ))}
             </ul>

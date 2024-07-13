@@ -3,11 +3,11 @@
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
 
-export const SubmitButton = () => {
+export const SubmitButton = ({ disabled }: { disabled?: boolean }) => {
     const { pending } = useFormStatus();
 
     return (
-        <Button disabled={pending} variant={"destructive"}>
+        <Button disabled={disabled || pending} variant={"destructive"}>
             Save
         </Button>
     );

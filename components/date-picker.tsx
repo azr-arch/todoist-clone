@@ -1,6 +1,6 @@
 "use client";
 
-import { format } from "date-fns";
+import { format, addDays, isSaturday, isSunday } from "date-fns";
 import { Calendar as CalendarIcon, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -11,10 +11,27 @@ import { useRef, useState } from "react";
 
 // Todo: implement a way to use default value
 export function DatePickerDemo({ defaultValue }: { defaultValue?: string }) {
-    const [date, setDate] = useState<Date>();
+    const [date, setDate] = useState<Date | undefined>(new Date());
     const dateRef = useRef<null | HTMLInputElement>(null);
 
     const handleClear = () => setDate(undefined);
+
+    // Determine whether to display the date as a weekday or the actual date
+    const formatDate = (date: Date): string => {
+        const today = new Date();
+        const tomorrow = addDays(today, 1);
+
+        if (date.toDateString() === today.toDateString()) {
+            return "Today";
+        } else if (date.toDateString() === tomorrow.toDateString()) {
+            return "Tomorrow";
+        } else if (date <= addDays(today, 6)) {
+            // Display weekday names up to next Thursday
+            return format(date, "EEEE"); // Full weekday name (e.g., "Monday")
+        } else {
+            return format(date, "d/M/y"); // Display formatted date (e.g., "15/3/23")
+        }
+    };
 
     return (
         <>
@@ -35,7 +52,7 @@ export function DatePickerDemo({ defaultValue }: { defaultValue?: string }) {
                     >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {date ? (
-                            format(date, "PPP")
+                            formatDate(date) // Display formatted date (weekday or actual date)
                         ) : (
                             <span className="text-sm font-thin">Due date</span>
                         )}

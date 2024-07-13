@@ -17,12 +17,12 @@ datasource db {
 model Task {
   id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   clerkUserId   String
-  email     String   @unique
+  userEmail     String?  
 
   title     String
   description String?
   dueDate      DateTime?
-  // Add assignee, priority, reminders, label, location (its for premium usrs on og site) columns
+  // Add assignee, priority, reminders, label, location (its for premium usrs on og site) rows
   sectionType    String
  
   createdAt DateTime @default(now())

@@ -1,6 +1,4 @@
-import { AddTaskButton } from "@/components/add-task-btn";
-import { AddTaskForm } from "@/components/form/add-task-form";
-import { Plus } from "lucide-react";
+import { AddTaskButton } from "@/app/(platform)/app/_components/add-task-btn";
 import { TaskList } from "../_components/tasklist";
 import { prismaDb } from "@/lib/db";
 
@@ -11,11 +9,18 @@ const TodayPage = async () => {
                 equals: "today",
             },
         },
+        orderBy: {
+            createdAt: "desc",
+        },
     });
 
+    if (!tasks) {
+        return <h1>No task found</h1>;
+    }
+
     return (
-        <div>
-            <div className="mb-10">
+        <div className="h-full">
+            <div className="mb-10 ">
                 <h1 className="text-3xl font-semibold hover:outline hover:outline-1 outline-neutral-200 rounded-md ">
                     Today
                 </h1>
