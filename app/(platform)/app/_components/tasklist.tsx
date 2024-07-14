@@ -4,30 +4,26 @@ import Image from "next/image";
 
 interface TaskListProps {
     data?: Task[];
+    className?: string;
 }
 
-export const TaskList = ({ data }: TaskListProps) => {
+export const TaskList = ({ data, className }: TaskListProps) => {
     return (
-        <div className="w-full  ">
+        <div className="w-full">
             {data && data.length > 0 ? (
-                <ul className="space-y-4 w-full">
-                    {data.map((task) => {
-                        return (
-                            <li key={task.id}>
-                                <TaskItem data={task} />
-                            </li>
-                        );
-                    })}
-                </ul>
+                <DragDropContext onDragEnd={() => {}}>
+                    <Droppable droppableId="tasks" type="task" direction="horizontal">
+
+                    </Droppable>
+                </DragDropContext>
             ) : (
-                <EmptyLists />
+                <EmptyLists />``
             )}
         </div>
     );
 };
 
-// Todo: Fix UI bug
-function EmptyLists() {
+export function EmptyLists() {
     return (
         <div className="w-full  absolute z-40 flex flex-col max-w-[300px] items-center justify-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="w-[200px] h-[200px] relative">
