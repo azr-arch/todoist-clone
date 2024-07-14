@@ -1,6 +1,7 @@
 import { Task } from "@prisma/client";
 import { TaskItem } from "./task-item";
 import Image from "next/image";
+import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 
 interface TaskListProps {
     data?: Task[];
@@ -12,12 +13,10 @@ export const TaskList = ({ data, className }: TaskListProps) => {
         <div className="w-full">
             {data && data.length > 0 ? (
                 <DragDropContext onDragEnd={() => {}}>
-                    <Droppable droppableId="tasks" type="task" direction="horizontal">
-
-                    </Droppable>
+                    <Droppable droppableId="tasks" type="task" direction="horizontal"></Droppable>
                 </DragDropContext>
             ) : (
-                <EmptyLists />``
+                <EmptyLists />
             )}
         </div>
     );
