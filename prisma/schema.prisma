@@ -24,6 +24,8 @@ model Task {
   dueDate      DateTime?
   // Add assignee, priority, reminders, label, location (its for premium usrs on og site) rows
   sectionType    String
+
+  order         Int
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -20,6 +20,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     let task;
 
     try {
+        const lastTask = await prismaDb.task.findFirst({
+            orderBy: {
+                order: "desc"
+            }
+        })
+
+        const newOrder = lastTask ? lastTask.order + 1 : 1
+
         task = await prismaDb.task.create({
             data: {
                 clerkUserId: user.id,
@@ -28,6 +36,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 sectionType,
                 dueDate: dueDate ? new Date(dueDate) : null,
                 userEmail: user.emailAddresses[0].emailAddress,
+                order: newOrder
             },
         });
     } catch (error) {

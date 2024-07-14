@@ -73,10 +73,14 @@
     body {
         @apply bg-background text-foreground;
     }
-}
 
-:root,
-html,
-body {
-    height: 100%;
+    :root,
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        min-height: 100vh;
+    }
 }

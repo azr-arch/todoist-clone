@@ -8,6 +8,9 @@ const UpcomingPage = async () => {
                 gte: new Date(),
             },
         },
+        orderBy: {
+            order: "asc",
+        },
     });
 
     return (

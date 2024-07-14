@@ -4,6 +4,7 @@ import { Task } from "@prisma/client";
 import { Circle } from "lucide-react";
 import { UpcomingListItem } from "./upcoming-list-item";
 import { AddTaskButton } from "../../_components/add-task-btn";
+import { EmptyLists } from "../../_components/tasklist";
 
 interface UpcomingListProps {
     data?: Task[];
@@ -30,6 +31,8 @@ export const UpcomingList = ({ data }: UpcomingListProps) => {
 
     return (
         <div className="w-full  ">
+            {!groupedTasks && <EmptyLists />}
+
             {Object.entries(groupedTasks).map(([date, tasks]) => {
                 const formattedDate = new Date(date).toLocaleDateString("en-US", {
                     day: "numeric",

@@ -17,11 +17,11 @@ export const AddTaskButton = () => {
     return (
         <>
             {isActive ? (
-                <AddTaskForm onClose={toggleActive} />
+                <AddTaskForm onCloseForm={toggleActive} />
             ) : (
                 <Button
                     variant={"ghost"}
-                    className="flex items-center gap-x-2 px-0 hover:bg-transparent"
+                    className="flex items-center gap-x-2 mb-10 px-0 hover:bg-transparent"
                     role="button"
                     onClick={toggleActive}
                 >

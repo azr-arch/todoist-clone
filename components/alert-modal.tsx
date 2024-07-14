@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Dialog } from "./ui/dialog";
 import { Modal } from "./ui/modal";
 import { Button } from "./ui/button";
 
