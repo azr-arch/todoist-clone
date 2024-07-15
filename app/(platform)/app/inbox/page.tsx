@@ -17,12 +17,12 @@ const InboxPage = async () => {
 
     return (
         <div className="h-full">
-            <div className="mb-10 ">
+            <div className="mb-10 px-5">
                 <h1 className="text-3xl font-semibold hover:outline hover:outline-1 outline-neutral-200 rounded-md ">
                     Inbox
                 </h1>
             </div>
-            <div>
+            <div className="px-4">
                 <TaskList data={tasks} className="h-[58px]" />
                 <AddTaskButton />
             </div>
