@@ -1,6 +1,5 @@
 "use client";
 
-import { DatePickerDemo } from "@/components/date-picker";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { AutosizeTextArea } from "@/components/form/autosize-textarea";
@@ -13,8 +12,8 @@ import { toast } from "sonner";
 import { FormInput } from "@/components/form/form-input";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { useEventListener, useOnClickOutside } from "usehooks-ts";
 import { AlertModal } from "@/components/alert-modal";
+import { CustomCalendar } from "@/components/custom-calendar";
 
 interface AddTaskFormProps {
     onCloseForm: () => void;
@@ -92,7 +91,7 @@ export const AddTaskForm = ({ onCloseForm }: AddTaskFormProps) => {
 
                         <AutosizeTextArea />
                         <div className="mt-3">
-                            <DatePickerDemo />
+                            <CustomCalendar />
                         </div>
                     </div>
 

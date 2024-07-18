@@ -5,18 +5,19 @@ import { TaskItem } from "./task-item";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { reorder } from "@/lib/utils";
+import { generateHeading } from "@/lib/utils";
 import { useAction } from "@/hooks/use-action";
 import { updateTaskOrder } from "@/actions/update-task-order";
 import { toast } from "sonner";
+import { CustomCalendar } from "@/components/custom-calendar";
 
 interface TaskListProps {
     data?: Task[];
     className?: string;
-    dueDateVisible?: boolean;
+    expiredItemExists?: boolean;
 }
 
-export const TaskList = ({ data, className, dueDateVisible }: TaskListProps) => {
+export const TaskList = ({ data, className, expiredItemExists }: TaskListProps) => {
     const [orderedData, setOrderedData] = useState(data);
 
     const { execute } = useAction(updateTaskOrder, {
@@ -64,6 +65,14 @@ export const TaskList = ({ data, className, dueDateVisible }: TaskListProps) => 
 
     return (
         <div className="w-full  ">
+            {/* For now this heading is only available in inbox page */}
+
+            {/* Todo: reimplement date heading  */}
+            {expiredItemExists && (
+                <h2 className=" w-full font-medium px-2 mb-4 text-black inline-flex items-center border-b border-b-muted">
+                    {generateHeading(new Date())}
+                </h2>
+            )}
             {orderedData && orderedData.length > 0 ? (
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Droppable droppableId="tasks" type="task" direction="vertical">

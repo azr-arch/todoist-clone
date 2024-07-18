@@ -25,8 +25,28 @@ model Task {
   // Add assignee, priority, reminders, label, location (its for premium usrs on og site) rows
   sectionType    String
 
-  order         Int
+  order           Int
+  isCompleted   Boolean @default(false)
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum ACTION {
+  COMPLETE
+  // for later use
+  DELETE
+  UPDATE
+}
+model AuditLog {
+  id              String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  action          ACTION
+  taskId        String
+  taskTitle     String
+  clerkUserId          String
+  userImage       String @db.String()
+  userName        String @db.String()
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

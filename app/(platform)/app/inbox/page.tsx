@@ -6,6 +6,11 @@ import { TaskItem } from "../_components/task-item";
 
 const InboxPage = async () => {
     const tasks = await prismaDb.task.findMany({
+        where: {
+            isCompleted: {
+                not: true,
+            },
+        },
         orderBy: {
             order: "asc",
         },

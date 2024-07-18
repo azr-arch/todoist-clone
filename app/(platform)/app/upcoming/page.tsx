@@ -4,6 +4,9 @@ import { UpcomingList } from "./_components/upcoming-list";
 const UpcomingPage = async () => {
     const upcomingTasks = await prismaDb.task.findMany({
         where: {
+            isCompleted: {
+                not: true,
+            },
             dueDate: {
                 gte: new Date(),
             },
@@ -13,6 +16,7 @@ const UpcomingPage = async () => {
         },
     });
 
+    // Todo add overdueList here and add drag and drop
     return (
         <div className="h-full">
             <div className="mb-10 ">

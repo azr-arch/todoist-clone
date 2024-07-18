@@ -12,21 +12,28 @@ import { useAction } from "@/hooks/use-action";
 import { toast } from "sonner";
 import { FormInput } from "@/components/form/form-input";
 import { useEffect, useRef } from "react";
+import { updateTask } from "@/actions/update-task";
+import { CustomCalendar } from "@/components/custom-calendar";
 
-interface AddTaskFormProps {
+interface EditTaskFormProps {
     onClose: () => void;
+    taskId: string;
+    defaultFormValues?: {
+        title?: string;
+        description?: string;
+        dueDate?: Date;
+        sectionType?: string;
+    };
 }
 
-// Todo complete this
-
-export const EditTaskForm = ({ onClose }: AddTaskFormProps) => {
-    const { execute, fieldErrors, isLoading, errors } = useAction(addTask, {
+export const EditTaskForm = ({ onClose, defaultFormValues, taskId }: EditTaskFormProps) => {
+    const { execute, fieldErrors, isLoading, errors } = useAction(updateTask, {
         onComplete: () => {
             onClose();
         },
-        onSuccess: () => {
-            toast("Task added", {
-                description: `The task has been successfully created.`,
+        onSuccess: (data) => {
+            toast("Task updated", {
+                description: `The task has been successfully updated.`,
             });
         },
         onError: (err) => {
@@ -46,6 +53,7 @@ export const EditTaskForm = ({ onClose }: AddTaskFormProps) => {
         const sectionType = formData.get("sectionType") as string;
 
         execute({
+            taskId,
             title,
             description: desc,
             dueDate,
@@ -61,11 +69,17 @@ export const EditTaskForm = ({ onClose }: AddTaskFormProps) => {
         <div className="w-full rounded-md border-neutral-300 border min-h-[158px] relative">
             <form action={onSubmit} className="w-full h-full">
                 <div className="p-2 flex flex-col items-start w-full">
-                    <FormInput id="title" ref={inputRef} placeholder="Task name" type="text" />
+                    <FormInput
+                        id="title"
+                        ref={inputRef}
+                        placeholder="Task name"
+                        type="text"
+                        defaultValue={defaultFormValues?.title}
+                    />
 
-                    <AutosizeTextArea />
+                    <AutosizeTextArea defaultValue={defaultFormValues?.description} />
                     <div className="mt-3">
-                        <DatePickerDemo />
+                        <CustomCalendar defaultValue={defaultFormValues?.dueDate} />
                     </div>
                 </div>
 
@@ -76,7 +90,7 @@ export const EditTaskForm = ({ onClose }: AddTaskFormProps) => {
                     <input
                         name="sectionType"
                         type="hidden"
-                        value={pathname.split("/").slice(-1)[0]}
+                        value={defaultFormValues?.sectionType ?? pathname.split("/").slice(-1)[0]}
                         readOnly
                     />
 

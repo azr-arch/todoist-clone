@@ -22,11 +22,11 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     try {
         const lastTask = await prismaDb.task.findFirst({
             orderBy: {
-                order: "desc"
-            }
-        })
+                order: "desc",
+            },
+        });
 
-        const newOrder = lastTask ? lastTask.order + 1 : 1
+        const newOrder = lastTask ? lastTask.order + 1 : 1;
 
         task = await prismaDb.task.create({
             data: {
@@ -36,7 +36,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 sectionType,
                 dueDate: dueDate ? new Date(dueDate) : null,
                 userEmail: user.emailAddresses[0].emailAddress,
-                order: newOrder
+                order: newOrder,
             },
         });
     } catch (error) {

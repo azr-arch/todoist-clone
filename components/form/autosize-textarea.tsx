@@ -5,10 +5,10 @@ import { useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 
 export const AutosizeTextArea = ({
-    value: defaultValue,
+    defaultValue,
     disabled,
 }: {
-    value?: string;
+    defaultValue?: string;
     disabled?: boolean;
 }) => {
     const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
