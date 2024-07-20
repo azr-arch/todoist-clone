@@ -3,6 +3,8 @@ import { TaskList } from "../_components/tasklist";
 import { AddTaskButton } from "../_components/add-task-btn";
 import { Task } from "@prisma/client";
 import { TaskItem } from "../_components/task-item";
+import { AddSectionBtn } from "./_components/add-section-btn";
+import { SectionContainer } from "./_components/section-container";
 
 const InboxPage = async () => {
     const tasks = await prismaDb.task.findMany({
@@ -10,6 +12,18 @@ const InboxPage = async () => {
             isCompleted: {
                 not: true,
             },
+            sectionId: {
+                equals: null,
+            },
+        },
+        orderBy: {
+            order: "asc",
+        },
+    });
+
+    const sections = await prismaDb.section.findMany({
+        include: {
+            tasks: true,
         },
         orderBy: {
             order: "asc",
@@ -22,15 +36,24 @@ const InboxPage = async () => {
 
     return (
         <div className="h-full">
-            <div className="mb-10 px-5">
-                <h1 className="text-3xl font-semibold hover:outline hover:outline-1 outline-neutral-200 rounded-md ">
-                    Inbox
-                </h1>
+            <div className="w-full">
+                <div className="mb-10 px-5">
+                    <h1 className="text-3xl font-semibold hover:outline hover:outline-1 outline-neutral-200 rounded-md ">
+                        Inbox
+                    </h1>
+                </div>
+                <div className="px-4">
+                    <TaskList data={tasks} className="h-[58px]" />
+                    <AddTaskButton />
+                </div>
+
+                {/* Add a new section button */}
+                <div className="my-1">
+                    <AddSectionBtn prevOrder={0} />
+                </div>
             </div>
-            <div className="px-4">
-                <TaskList data={tasks} className="h-[58px]" />
-                <AddTaskButton />
-            </div>
+
+            <SectionContainer data={sections} />
         </div>
     );
 };

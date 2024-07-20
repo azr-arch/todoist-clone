@@ -27,9 +27,24 @@ model Task {
 
   order           Int
   isCompleted   Boolean @default(false)
+
+  sectionId     String? @db.Uuid
+  section       Section? @relation(fields: [sectionId], references: [id], onDelete: Cascade) 
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+model Section {
+  id              String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clerkUserId     String
+  title           String
+  tasks           Task[] 
+  order           Int
+
+  // Maybe isArchive ?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 enum ACTION {

@@ -16,7 +16,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     }
 
-    const { title, description, dueDate, sectionType } = data;
+    const { title, description, dueDate, sectionType, sectionId } = data;
     let task;
 
     try {
@@ -37,6 +37,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 dueDate: dueDate ? new Date(dueDate) : null,
                 userEmail: user.emailAddresses[0].emailAddress,
                 order: newOrder,
+
+                sectionId: sectionId ? sectionId : null,
             },
         });
     } catch (error) {
@@ -51,4 +53,4 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     return { data: task };
 };
 
-export const addTask = createSafeAction(AddTaskSchema, handler);
+export const createTask = createSafeAction(AddTaskSchema, handler);

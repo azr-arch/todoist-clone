@@ -7,7 +7,7 @@ import { useAddTaskModal } from "@/hooks/use-add-task-modal";
 import { AddTaskForm } from "./task-form/add-task-form";
 import { Button } from "@/components/ui/button";
 
-export const AddTaskButton = () => {
+export const AddTaskButton = ({ sectionId }: { sectionId?: string }) => {
     const [isActive, setIsActive] = useState(false);
 
     const toggleActive = () => {
@@ -17,11 +17,11 @@ export const AddTaskButton = () => {
     return (
         <>
             {isActive ? (
-                <AddTaskForm onCloseForm={toggleActive} />
+                <AddTaskForm onCloseForm={toggleActive} sectionId={sectionId} />
             ) : (
                 <Button
                     variant={"ghost"}
-                    className="flex items-center gap-x-2 mb-10 px-0 hover:bg-transparent"
+                    className="flex items-center gap-x-2 mb-4 px-0 hover:bg-transparent"
                     role="button"
                     onClick={toggleActive}
                 >

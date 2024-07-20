@@ -1,13 +1,12 @@
 "use client";
 
-import { DatePickerDemo } from "@/components/date-picker";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { AutosizeTextArea } from "@/components/form/autosize-textarea";
-import { SubmitButton } from "@/components/form/submit-button";
+import { FormSubmit } from "@/components/form/form-submit";
+
 import { usePathname } from "next/navigation";
 
-import { addTask } from "@/actions/add-task";
 import { useAction } from "@/hooks/use-action";
 import { toast } from "sonner";
 import { FormInput } from "@/components/form/form-input";
@@ -98,7 +97,7 @@ export const EditTaskForm = ({ onClose, defaultFormValues, taskId }: EditTaskFor
                         <Button onClick={onClose} variant={"outline"}>
                             Cancel
                         </Button>
-                        <SubmitButton />
+                        <FormSubmit />
                     </div>
                 </div>
             </form>

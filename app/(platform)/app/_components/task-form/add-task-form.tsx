@@ -3,10 +3,10 @@
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { AutosizeTextArea } from "@/components/form/autosize-textarea";
-import { SubmitButton } from "@/components/form/submit-button";
+import { FormSubmit } from "@/components/form/form-submit";
 import { usePathname } from "next/navigation";
 
-import { addTask } from "@/actions/add-task";
+import { createTask } from "@/actions/create-task";
 import { useAction } from "@/hooks/use-action";
 import { toast } from "sonner";
 import { FormInput } from "@/components/form/form-input";
@@ -17,12 +17,13 @@ import { CustomCalendar } from "@/components/custom-calendar";
 
 interface AddTaskFormProps {
     onCloseForm: () => void;
+    sectionId?: string;
 }
 
-export const AddTaskForm = ({ onCloseForm }: AddTaskFormProps) => {
+export const AddTaskForm = ({ onCloseForm, sectionId }: AddTaskFormProps) => {
     const [alertModalOpen, setAlertModalOpen] = useState(false);
 
-    const { execute, fieldErrors, isLoading, errors } = useAction(addTask, {
+    const { execute, fieldErrors, isLoading, errors } = useAction(createTask, {
         onComplete: () => {
             onCloseForm();
         },
@@ -46,8 +47,6 @@ export const AddTaskForm = ({ onCloseForm }: AddTaskFormProps) => {
         async (formData: FormData) => {
             if (!inputRef.current?.value) return;
 
-            console.log("form submitting");
-
             const title = formData.get("title") as string;
             const desc = formData.get("description") as string;
             const dueDate = formData.get("dueDate") as string;
@@ -58,9 +57,10 @@ export const AddTaskForm = ({ onCloseForm }: AddTaskFormProps) => {
                 description: desc,
                 dueDate,
                 sectionType,
+                sectionId, // If section id is present then it belongs to, a section group ..
             });
         },
-        [execute]
+        [execute, sectionId]
     );
 
     useEffect(() => {
@@ -91,7 +91,9 @@ export const AddTaskForm = ({ onCloseForm }: AddTaskFormProps) => {
 
                         <AutosizeTextArea />
                         <div className="mt-3">
-                            <CustomCalendar />
+                            <CustomCalendar
+                                defaultValue={pathname === "/app/today" ? new Date() : undefined}
+                            />
                         </div>
                     </div>
 
@@ -122,7 +124,7 @@ export const AddTaskForm = ({ onCloseForm }: AddTaskFormProps) => {
                             >
                                 Cancel
                             </Button>
-                            <SubmitButton />
+                            <FormSubmit />
                         </div>
                     </div>
                 </form>

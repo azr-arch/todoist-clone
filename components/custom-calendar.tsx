@@ -15,7 +15,9 @@ interface CustomCalendarProps {
 }
 
 export function CustomCalendar({ tasks, defaultValue }: CustomCalendarProps) {
-    const [date, setDate] = useState<Date | undefined>(defaultValue ?? new Date());
+    const [date, setDate] = useState<Date | undefined>(defaultValue ? defaultValue : undefined);
+
+    console.log({ defaultValue, date });
     const [open, setOpen] = useState(false);
 
     const [stringDate, setStringDate] = React.useState<string>("");
