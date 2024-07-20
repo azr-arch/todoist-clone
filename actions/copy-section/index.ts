@@ -6,6 +6,7 @@ import { CopySectionSchema } from "./schema";
 import { prismaDb } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { Section } from "@prisma/client";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const user = await currentUser();
@@ -17,7 +18,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     }
 
     const { sectionId } = data;
-    let section;
+    let section: Section;
 
     try {
         const sectionToCopy = await prismaDb.section.findUnique({
@@ -38,7 +39,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         const immediateNextSection = await prismaDb.section.findFirst({
             where: {
                 order: {
-                    gt: sectionToCopy?.order,
+                    gt: sectionToCopy.order,
                 },
             },
         });
@@ -47,22 +48,27 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             ? Math.floor((sectionToCopy.order + immediateNextSection.order) / 2)
             : sectionToCopy.order + 1000;
 
+        // Todo Fix copying tasks order
+        // Create the new section without tasks first
         section = await prismaDb.section.create({
             data: {
                 title: `Copy of ${sectionToCopy.title}`,
                 clerkUserId: user.id,
                 order: newOrder,
-                tasks: {
-                    createMany: {
-                        data: sectionToCopy.tasks.map((task) => ({
-                            ...task,
-                        })),
-                    },
-                },
             },
-            include: {
-                tasks: true,
-            },
+        });
+
+        // Copy tasks and associate them with the new section
+        const tasksToCopy = sectionToCopy.tasks.map((task) => ({
+            ...task,
+            sectionId: section.id, // Associate with the new section
+            id: undefined, // Remove the original ID to avoid conflicts
+            createdAt: undefined, // Remove timestamps to avoid conflicts
+            updatedAt: undefined,
+        }));
+
+        await prismaDb.task.createMany({
+            data: tasksToCopy,
         });
 
         // Will add audit logs here for actions like update, delete or create!

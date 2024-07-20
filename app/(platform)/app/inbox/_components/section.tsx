@@ -23,11 +23,9 @@ export const Section = ({ data }: SectionProps) => {
         <div className="w-full">
             <SectionHeader data={data} isOpen={isOpen} toggleListOpen={toggleOpen} />
             {isOpen && (
-                <div className="">
+                <div className="px-7 py-2">
                     <TaskList data={data.tasks} />
-                    <div className="px-7">
-                        <AddTaskButton sectionId={data.id} />
-                    </div>
+                    <AddTaskButton sectionId={data.id} />
                 </div>
             )}
         </div>
