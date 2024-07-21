@@ -16,7 +16,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     }
 
-    const { title, description, dueDate, sectionType, sectionId } = data;
+    const { title, description, dueDate, sectionType, sectionId, labelId } = data;
     let task;
 
     try {
@@ -28,18 +28,31 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
         const newOrder = lastTask ? lastTask.order + 1 : 1;
 
-        task = await prismaDb.task.create({
-            data: {
-                clerkUserId: user.id,
-                title,
-                description,
-                sectionType,
-                dueDate: dueDate ? new Date(dueDate) : null,
-                userEmail: user.emailAddresses[0].emailAddress,
-                order: newOrder,
+        const taskData = {
+            clerkUserId: user.id,
+            title,
+            description,
+            sectionType,
+            dueDate: dueDate ? new Date(dueDate) : null,
+            userEmail: user.emailAddresses[0].emailAddress,
+            order: newOrder,
+            sectionId: sectionId ? sectionId : null,
+        };
 
-                sectionId: sectionId ? sectionId : null,
-            },
+        if (labelId) {
+            taskData.labels = {
+                create: {
+                    label: {
+                        connect: {
+                            id: labelId,
+                        },
+                    },
+                },
+            };
+        }
+
+        task = await prismaDb.task.create({
+            data: taskData,
         });
     } catch (error) {
         console.log("[ADD_TASK]: ", error);

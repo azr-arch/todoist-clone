@@ -11,4 +11,5 @@ export const AddTaskSchema = z.object({
     dueDate: z.optional(z.string()),
     sectionType: z.string(),
     sectionId: z.optional(z.string()),
+    labelId: z.optional(z.string()),
 });

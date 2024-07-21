@@ -13,7 +13,6 @@ export const SectionContainer = ({ data }: SectionContainerProps) => {
         <ul className="w-full">
             {data && data.length > 0
                 ? data.map((section) => (
-                      // Section only prompting me that thers is only tasks item in seciton not others like id, section title and stuff
                       <li key={section.id} className="w-full">
                           <Section data={section} />
                           <div className="mt-5 mb-3">

@@ -13,38 +13,69 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
- 
 model Task {
-  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id            String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   clerkUserId   String
   userEmail     String?  
 
-  title     String
-  description String?
-  dueDate      DateTime?
-  // Add assignee, priority, reminders, label, location (its for premium usrs on og site) rows
-  sectionType    String
+  title         String
+  description   String?
+  dueDate       DateTime?
+  // Add assignee, priority, reminders, location (its for premium usrs on og site) 
+  sectionType   String
 
-  order           Int
+  order         Int
   isCompleted   Boolean @default(false)
 
   sectionId     String? @db.Uuid
   section       Section? @relation(fields: [sectionId], references: [id], onDelete: Cascade) 
+
+  labels        TaskLabels[]
  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([title])
+}
+
+model TaskLabels {
+  label         Label @relation(fields: [labelId], references: [id])
+  labelId       String @db.Uuid
+
+  task          Task @relation(fields: [taskId], references: [id])
+  taskId        String @db.Uuid
+
+  @@id([taskId, labelId])
+}
+
+
+model Label {
+  id            String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String
+  color         String
+
+  clerkUserId   String
+  userEmail     String?  
+
+  order         Int
+
+  tasks         TaskLabels[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([name])
 }
 model Section {
-  id              String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  clerkUserId     String
-  title           String
-  tasks           Task[] 
-  order           Int
+  id            String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clerkUserId   String
+  title         String
+  tasks         Task[] 
+  order         Int
 
   // Maybe isArchive ?
-
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 enum ACTION {
@@ -54,14 +85,14 @@ enum ACTION {
   UPDATE
 }
 model AuditLog {
-  id              String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  action          ACTION
-  taskId        String
-  taskTitle     String
-  clerkUserId          String
-  userImage       String @db.String()
-  userName        String @db.String()
+  id             String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  action         ACTION
+  taskId         String
+  taskTitle      String
+  clerkUserId    String
+  userImage      String @db.String()
+  userName       String @db.String()
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

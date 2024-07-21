@@ -1,7 +1,14 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { CalendarDays, CalendarFold, CircleCheck, Inbox, PlusCircle } from "lucide-react";
+import {
+    CalendarDays,
+    CalendarFold,
+    CircleCheck,
+    Inbox,
+    LayoutGrid,
+    PlusCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -34,6 +41,12 @@ export const SidebarNav = () => {
             value: "Completed",
             icon: <CircleCheck className={iconStyles} />,
             active: pathname === "/app/completed",
+        },
+        {
+            href: "/app/filters-labels",
+            value: "Filters & Labels",
+            icon: <LayoutGrid className={iconStyles} />,
+            active: pathname === "/app/filters-labels",
         },
     ];
 

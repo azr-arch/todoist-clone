@@ -4,7 +4,7 @@ import { Task } from "@prisma/client";
 import { Circle } from "lucide-react";
 import { UpcomingListItem } from "./upcoming-list-item";
 import { AddTaskButton } from "../../_components/add-task-btn";
-import { EmptyLists } from "../../_components/tasklist";
+import { EmptyLists } from "../../today/page";
 
 interface UpcomingListProps {
     data?: Task[];

@@ -10,17 +10,18 @@ import { createTask } from "@/actions/create-task";
 import { useAction } from "@/hooks/use-action";
 import { toast } from "sonner";
 import { FormInput } from "@/components/form/form-input";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { AlertModal } from "@/components/alert-modal";
+import { AlertModal } from "@/components/modals/alert-modal";
 import { CustomCalendar } from "@/components/custom-calendar";
 
 interface AddTaskFormProps {
     onCloseForm: () => void;
     sectionId?: string;
+    labelId?: string;
 }
 
-export const AddTaskForm = ({ onCloseForm, sectionId }: AddTaskFormProps) => {
+export const AddTaskForm = ({ onCloseForm, sectionId, labelId }: AddTaskFormProps) => {
     const [alertModalOpen, setAlertModalOpen] = useState(false);
 
     const { execute, fieldErrors, isLoading, errors } = useAction(createTask, {
@@ -43,6 +44,16 @@ export const AddTaskForm = ({ onCloseForm, sectionId }: AddTaskFormProps) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const formRef = useRef<HTMLFormElement | null>(null);
 
+    const formatSectionType = useMemo(
+        () =>
+            pathname.includes("/app/label")
+                ? "label"
+                : pathname.includes("/app/filter")
+                ? "filter"
+                : pathname.split("/").slice(-1)[0],
+        [pathname]
+    );
+
     const onSubmit = useCallback(
         async (formData: FormData) => {
             if (!inputRef.current?.value) return;
@@ -58,9 +69,10 @@ export const AddTaskForm = ({ onCloseForm, sectionId }: AddTaskFormProps) => {
                 dueDate,
                 sectionType,
                 sectionId, // If section id is present then it belongs to, a section group ..
+                labelId, // If label id is present
             });
         },
-        [execute, sectionId]
+        [execute, labelId, sectionId]
     );
 
     useEffect(() => {
@@ -104,7 +116,7 @@ export const AddTaskForm = ({ onCloseForm, sectionId }: AddTaskFormProps) => {
                         <input
                             name="sectionType"
                             type="hidden"
-                            value={pathname.split("/").slice(-1)[0]}
+                            value={formatSectionType}
                             readOnly
                         />
 

@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { AlertModal } from "@/components/alert-modal";
+import { AlertModal } from "@/components/modals/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,

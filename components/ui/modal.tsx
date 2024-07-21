@@ -1,10 +1,11 @@
 "use client";
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
+import { Separator } from "./separator";
 
 interface ModalProps {
     title: string;
-    description: string;
+    description?: string;
     isOpen: boolean;
     onClose: () => void;
     children?: React.ReactNode;
@@ -24,7 +25,9 @@ export const Modal: React.FC<ModalProps> = ({ title, description, isOpen, onClos
                     <DialogTitle>{title}</DialogTitle>
                     <DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
-                <div>{children}</div>
+                <>
+                    <div>{children}</div>
+                </>
             </DialogContent>
         </Dialog>
     );

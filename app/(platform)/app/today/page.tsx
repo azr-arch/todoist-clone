@@ -16,34 +16,38 @@ const getStartAndEndOfDay = () => {
 };
 
 const fetchTasks = async (startOfDay: Date, endOfDay: Date) => {
-    const [tasks, overdueTasks] = await Promise.all([
-        prismaDb.task.findMany({
-            where: {
-                isCompleted: {
-                    not: true,
+    try {
+        const [tasks, overdueTasks] = await Promise.all([
+            prismaDb.task.findMany({
+                where: {
+                    isCompleted: {
+                        not: true,
+                    },
+                    dueDate: {
+                        gte: startOfDay,
+                        lte: endOfDay,
+                    },
                 },
-                dueDate: {
-                    gte: startOfDay,
-                    lte: endOfDay,
+                orderBy: {
+                    order: "asc",
                 },
-            },
-            orderBy: {
-                order: "asc",
-            },
-        }),
-        prismaDb.task.findMany({
-            where: {
-                dueDate: {
-                    lt: startOfDay,
+            }),
+            prismaDb.task.findMany({
+                where: {
+                    dueDate: {
+                        lt: startOfDay,
+                    },
                 },
-            },
-            orderBy: {
-                order: "asc",
-            },
-        }),
-    ]);
+                orderBy: {
+                    order: "asc",
+                },
+            }),
+        ]);
 
-    return { tasks, overdueTasks };
+        return { tasks, overdueTasks };
+    } catch (error) {
+        return { tasks: [], overdueTasks: [] };
+    }
 };
 
 const TodayPage = async () => {
