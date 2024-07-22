@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Label } from "@prisma/client";
 import { Edit, Heart, MoreHorizontal, Tag } from "lucide-react";
@@ -12,6 +14,12 @@ export const LabelItem = ({ data }: LabelItemProps) => {
     const formattedLabelName = data.name.replace(/\s+/g, "-");
     const labelUrl = `/app/label/${formattedLabelName}_${data.id}`;
 
+    const clickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        e.preventDefault();
+        console.log("Clicked actions");
+    };
+
     return (
         <Link href={labelUrl}>
             <div className="min-h-[34px] group py-1 flex items-center justify-between border-b border-neutral-300/50">
@@ -21,13 +29,13 @@ export const LabelItem = ({ data }: LabelItemProps) => {
                 </div>
 
                 <div className="group-hover:opacity-100 group-hover:visible invisible opacity-0 transition-opacity flex items-center gap-x-.5">
-                    <Button size={"icon"} variant={"ghost"}>
+                    <Button onClick={clickHandler} size={"icon"} variant={"ghost"}>
                         <Heart className="w-5 h-5" />
                     </Button>
-                    <Button size={"icon"} variant={"ghost"}>
+                    <Button onClick={clickHandler} size={"icon"} variant={"ghost"}>
                         <Edit className="w-5 h-5" />
                     </Button>
-                    <Button size={"icon"} variant={"ghost"}>
+                    <Button onClick={clickHandler} size={"icon"} variant={"ghost"}>
                         <MoreHorizontal className="w-5 h-5" />
                     </Button>
                 </div>

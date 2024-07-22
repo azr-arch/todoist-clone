@@ -31,6 +31,13 @@ const fetchTasks = async (startOfDay: Date, endOfDay: Date) => {
                 orderBy: {
                     order: "asc",
                 },
+                include: {
+                    labels: {
+                        select: {
+                            label: true,
+                        },
+                    },
+                },
             }),
             prismaDb.task.findMany({
                 where: {
@@ -40,6 +47,13 @@ const fetchTasks = async (startOfDay: Date, endOfDay: Date) => {
                 },
                 orderBy: {
                     order: "asc",
+                },
+                include: {
+                    labels: {
+                        select: {
+                            label: true,
+                        },
+                    },
                 },
             }),
         ]);

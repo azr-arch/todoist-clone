@@ -19,6 +19,13 @@ const InboxPage = async () => {
         orderBy: {
             order: "asc",
         },
+        include: {
+            labels: {
+                select: {
+                    label: true,
+                },
+            },
+        },
     });
 
     const sections = await prismaDb.section.findMany({

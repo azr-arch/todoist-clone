@@ -14,6 +14,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { AlertModal } from "@/components/modals/alert-modal";
 import { CustomCalendar } from "@/components/custom-calendar";
+import TaskInput from "@/components/task-input";
 
 interface AddTaskFormProps {
     onCloseForm: () => void;
@@ -86,8 +87,8 @@ export const AddTaskForm = ({ onCloseForm, sectionId, labelId }: AddTaskFormProp
                 onClose={() => setAlertModalOpen(false)}
                 onConfirm={() => {
                     console.log("inconfirm ");
-                    if (!inputRef.current) return;
-                    inputRef.current.value = "";
+                    // if (!inputRef.current) return;
+                    // inputRef.current.value = "";
                     onCloseForm();
                 }}
                 loading={isLoading}

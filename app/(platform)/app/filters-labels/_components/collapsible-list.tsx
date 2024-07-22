@@ -5,12 +5,12 @@ import { ChevronDown, ChevronRight, Plus } from "lucide-react";
 import { useState } from "react";
 import { LabelItem } from "./label-item";
 import { Label } from "@prisma/client";
-import { LabelsWithLists } from "@/lib/types";
+import { LabelWithLists } from "@/lib/types";
 
 interface CollapsibleListProps {
     title: string;
     onDialogOpen?: () => void;
-    data?: LabelsWithLists; // Add filter type too..
+    data?: LabelWithLists[]; // Add filter type too..
     type: "filter" | "label";
 }
 

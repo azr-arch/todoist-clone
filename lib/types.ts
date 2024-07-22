@@ -4,6 +4,6 @@ export type SectionWithLists = Section & {
     tasks?: Task[];
 };
 
-export type LabelsWithLists = (Label & {
+export type LabelWithLists = Label & {
     tasks?: Task[];
-})[];
+};

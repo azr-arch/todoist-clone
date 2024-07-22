@@ -14,6 +14,13 @@ const UpcomingPage = async () => {
         orderBy: {
             order: "asc",
         },
+        include: {
+            labels: {
+                select: {
+                    label: true,
+                },
+            },
+        },
     });
 
     // Todo add overdueList here and add drag and drop

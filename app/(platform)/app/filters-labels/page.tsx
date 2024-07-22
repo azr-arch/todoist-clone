@@ -3,7 +3,6 @@ import { CollapsibleList } from "./_components/collapsible-list";
 import { FilterList } from "./_components/filter-list";
 import { LabelList } from "./_components/label-list";
 import { Label } from "@prisma/client";
-import { LabelsWithLists } from "@/lib/types";
 
 const FiltersAndLabelsPage = async () => {
     let labels: Label[];

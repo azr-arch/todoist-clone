@@ -1,6 +1,6 @@
 "use client";
 
-import { Task } from "@prisma/client";
+import { Label, Task } from "@prisma/client";
 import { TaskItem } from "./task-item";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
 import Image from "next/image";
@@ -15,9 +15,10 @@ interface TaskListProps {
     data?: Task[];
     className?: string;
     expiredItemExists?: boolean;
+    label?: Label;
 }
 
-export const TaskList = ({ data, className, expiredItemExists }: TaskListProps) => {
+export const TaskList = ({ data, className, expiredItemExists, label }: TaskListProps) => {
     const [orderedData, setOrderedData] = useState(data);
 
     const { execute } = useAction(updateTaskOrder, {

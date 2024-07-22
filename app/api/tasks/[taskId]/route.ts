@@ -21,6 +21,8 @@ export async function DELETE(req: Request, { params }: { params: { taskId: strin
             },
         });
 
+        console.log({ task });
+
         return NextResponse.json(task);
     } catch (error) {
         console.log("[TASK_DELETE_API]", error);

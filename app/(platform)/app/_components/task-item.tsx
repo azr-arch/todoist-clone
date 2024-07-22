@@ -9,8 +9,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Task } from "@prisma/client";
-import { ArrowUpDown, Calendar, Check, Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Label, Task } from "@prisma/client";
+import { ArrowUpDown, Calendar, Check, Edit, MoreHorizontal, Tag, Trash } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
@@ -24,7 +24,11 @@ export const TaskItem = ({
     className,
     index,
 }: {
-    data: Task;
+    data: Task & {
+        labels?: {
+            label?: Label;
+        }[];
+    };
     className?: string;
     index: number;
 }) => {
@@ -123,13 +127,6 @@ export const TaskItem = ({
                         ref={provided.innerRef}
                         className={cn(
                             "w-full border-b h-fit min-h-[55px] border-b-neutral-200 px-2 flex flex-col justify-between pb-2 items-start group"
-                            // `${
-                            //     pathname === "/app/today"
-                            //         ? "h-[70px]"
-                            //         : pathname === "/app/upcoming"
-                            //         ? "h-[58px]"
-                            //         : "h-fit "
-                            // }`
                         )}
                     >
                         <div className="flex items-center gap-x-4 relative w-full">
@@ -193,25 +190,45 @@ export const TaskItem = ({
                                 </p>
                             )}
 
-                            {(data.dueDate && pathname === "/app/inbox") || hasExpired ? (
-                                <div
-                                    className={cn(
-                                        "flex items-center px-1 mt-1.5",
-                                        `${
-                                            dueDateText === "Today"
-                                                ? "text-green-600"
-                                                : dueDateText === "Tomorrow"
-                                                ? "text-[#d8b487]"
-                                                : hasExpired
-                                                ? "text-red-500"
-                                                : "text-neutral-400"
-                                        }`
-                                    )}
-                                >
-                                    <Calendar className="w-3 h-3 mr-1" />
-                                    <p className={"text-xs font-thin"}>{dueDateText}</p>
-                                </div>
-                            ) : null}
+                            <div className="flex items-end gap-x-1.5">
+                                {(data.dueDate && pathname === "/app/inbox") || hasExpired ? (
+                                    <div
+                                        className={cn(
+                                            "flex items-center px-1 mt-1.5",
+                                            `${
+                                                dueDateText === "Today"
+                                                    ? "text-green-600"
+                                                    : dueDateText === "Tomorrow"
+                                                    ? "text-[#d8b487]"
+                                                    : hasExpired
+                                                    ? "text-red-500"
+                                                    : "text-neutral-400"
+                                            }`
+                                        )}
+                                    >
+                                        <Calendar className="size-3 mr-1" />
+                                        <p className={"text-xs font-thin"}>{dueDateText}</p>
+                                    </div>
+                                ) : null}
+
+                                {data.labels && data.labels.length > 0
+                                    ? data.labels.map((label) => {
+                                          // This logs correct value, why am i getting double label nested ?
+                                          return (
+                                              <div
+                                                  key={label.label?.id}
+                                                  className="flex items-center gap-x-1.5 "
+                                                  style={{ color: label.label?.color }}
+                                              >
+                                                  <Tag className="rotate-90 size-3" />
+                                                  <p className="text-xs font-thin">
+                                                      {label.label?.name}
+                                                  </p>
+                                              </div>
+                                          );
+                                      })
+                                    : null}
+                            </div>
                         </div>
                     </div>
                 )}
