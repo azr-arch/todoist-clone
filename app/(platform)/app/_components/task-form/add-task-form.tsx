@@ -15,6 +15,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlertModal } from "@/components/modals/alert-modal";
 import { CustomCalendar } from "@/components/custom-calendar";
 import TaskInput from "@/components/task-input";
+import { PrioritySelect } from "@/components/form/priority-select";
+import { Priority } from "@prisma/client";
 
 interface AddTaskFormProps {
     onCloseForm: () => void;
@@ -63,6 +65,7 @@ export const AddTaskForm = ({ onCloseForm, sectionId, labelId }: AddTaskFormProp
             const desc = formData.get("description") as string;
             const dueDate = formData.get("dueDate") as string;
             const sectionType = formData.get("sectionType") as string;
+            const priority = formData.get("priority") as Priority;
 
             execute({
                 title,
@@ -71,6 +74,7 @@ export const AddTaskForm = ({ onCloseForm, sectionId, labelId }: AddTaskFormProp
                 sectionType,
                 sectionId, // If section id is present then it belongs to, a section group ..
                 labelId, // If label id is present
+                priority,
             });
         },
         [execute, labelId, sectionId]
@@ -103,10 +107,11 @@ export const AddTaskForm = ({ onCloseForm, sectionId, labelId }: AddTaskFormProp
                         <FormInput id="title" ref={inputRef} placeholder="Task name" type="text" />
 
                         <AutosizeTextArea />
-                        <div className="mt-3">
+                        <div className="mt-3 flex items-center gap-2">
                             <CustomCalendar
                                 defaultValue={pathname === "/app/today" ? new Date() : undefined}
                             />
+                            <PrioritySelect />
                         </div>
                     </div>
 

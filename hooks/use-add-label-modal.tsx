@@ -1,13 +1,12 @@
 import { create } from "zustand";
 
 type defaultFormValue = {
-    filterId: string;
+    labelId: string;
     name: string;
-    query: string;
     color: string;
 };
 
-type AddFilterModal = {
+type AddLabelModal = {
     isOpen: boolean;
     onOpen: (data?: defaultFormValue) => void;
     onClose: () => void;
@@ -15,7 +14,7 @@ type AddFilterModal = {
     defaultFormValue?: defaultFormValue;
 };
 
-export const useAddFilterModal = create<AddFilterModal>((set) => ({
+export const useAddLabel = create<AddLabelModal>((set) => ({
     isOpen: false,
     onOpen: (data) => set({ isOpen: true, defaultFormValue: data }),
     onClose: () => set({ isOpen: false, defaultFormValue: undefined }),

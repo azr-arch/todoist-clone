@@ -1,6 +1,6 @@
 "use client";
 
-import { Label, Task } from "@prisma/client";
+import { Label, Priority, Task } from "@prisma/client";
 import { TaskItem } from "./task-item";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
 import Image from "next/image";
@@ -18,6 +18,8 @@ interface TaskListProps {
     label?: Label;
 }
 
+const priorityOrder = [Priority.p1, Priority.p2, Priority.p3, Priority.p4];
+
 export const TaskList = ({ data, className, expiredItemExists, label }: TaskListProps) => {
     const [orderedData, setOrderedData] = useState(data);
 
@@ -32,6 +34,7 @@ export const TaskList = ({ data, className, expiredItemExists, label }: TaskList
         },
     });
 
+    // TODO: Fix reordering
     const onDragEnd = (result: DropResult) => {
         const { source, destination } = result;
 
@@ -42,16 +45,38 @@ export const TaskList = ({ data, className, expiredItemExists, label }: TaskList
             return;
         }
 
+        const sourceTask = orderedData[source.index];
+        const destTask = orderedData[destination.index];
+
+        // Prevent reordering between different priority levels
+        if ((sourceTask.priority || "p4") !== (destTask.priority || "p4")) {
+            toast("Cannot reorder tasks with different priorities");
+            return;
+        }
+
         // Create a deep copy of the objects within orderedData
         const reorderedData = orderedData.map((task) => ({ ...task }));
         const [removedTask] = reorderedData.splice(source.index, 1);
         reorderedData.splice(destination.index, 0, removedTask);
 
-        reorderedData[destination.index].order = orderedData[destination.index].order;
+        // Update order numbers within the same priority group
+        // const priorityGroup = reorderedData.filter(
+        //     (task) => (task.priority || "p4") === (sourceTask.priority || "p4")
+        // );
+        // priorityGroup.forEach((task, index) => {
+        //     task.order = index + 1;
+        // });
 
-        for (let i = source.index; i < destination.index; i += 1) {
-            reorderedData[i].order = orderedData[i].order;
-        }
+        // Create a deep copy of the objects within orderedData
+        // const reorderedData = orderedData.map((task) => ({ ...task }));
+        // const [removedTask] = reorderedData.splice(source.index, 1);
+        // reorderedData.splice(destination.index, 0, removedTask);
+
+        // reorderedData[destination.index].order = orderedData[destination.index].order;
+
+        // for (let i = source.index; i < destination.index; i += 1) {
+        //     reorderedData[i].order = orderedData[i].order;
+        // }
 
         setOrderedData(reorderedData);
 
@@ -61,7 +86,16 @@ export const TaskList = ({ data, className, expiredItemExists, label }: TaskList
     };
 
     useEffect(() => {
-        setOrderedData(data);
+        if (data) {
+            const sortedData = [...data].sort((a, b) => {
+                const priorityA = a.priority || "p4";
+                const priorityB = b.priority || "p4";
+                const priorityDiff =
+                    priorityOrder.indexOf(priorityA) - priorityOrder.indexOf(priorityB);
+                return priorityDiff !== 0 ? priorityDiff : a.order - b.order;
+            });
+            setOrderedData(sortedData);
+        }
     }, [data]);
 
     return (
@@ -76,7 +110,7 @@ export const TaskList = ({ data, className, expiredItemExists, label }: TaskList
             )}
             {orderedData && orderedData.length > 0 ? (
                 <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId="tasks" type="task" direction="vertical">
+                    {/* <Droppable droppableId="tasks" type="task" direction="vertical">
                         {(provided) => (
                             <ul
                                 {...provided.droppableProps}
@@ -98,7 +132,36 @@ export const TaskList = ({ data, className, expiredItemExists, label }: TaskList
                                 {provided.placeholder}
                             </ul>
                         )}
-                    </Droppable>
+                    </Droppable> */}
+                    {priorityOrder.map((priority) => (
+                        <Droppable
+                            key={priority}
+                            droppableId={`priority-${priority}`}
+                            type="task"
+                            direction="vertical"
+                        >
+                            {(provided) => (
+                                <ul
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                    className="space-y-4 my-4"
+                                >
+                                    {orderedData
+                                        .filter((task) => task.priority === priority)
+                                        .map((task, idx) => (
+                                            <li key={task.id}>
+                                                <TaskItem
+                                                    index={idx}
+                                                    className={className}
+                                                    data={task}
+                                                />
+                                            </li>
+                                        ))}
+                                    {provided.placeholder}
+                                </ul>
+                            )}
+                        </Droppable>
+                    ))}
                 </DragDropContext>
             ) : null}
         </div>

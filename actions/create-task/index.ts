@@ -6,6 +6,7 @@ import { AddTaskSchema } from "./schema";
 import { prismaDb } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { Priority } from "@prisma/client";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const user = await currentUser();
@@ -16,7 +17,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     }
 
-    const { title, description, dueDate, sectionType, sectionId, labelId } = data;
+    const { title, description, dueDate, sectionType, sectionId, labelId, priority } = data;
+    console.log({ sectionId });
     let task;
 
     try {
@@ -36,6 +38,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             dueDate: dueDate ? new Date(dueDate) : null,
             userEmail: user.emailAddresses[0].emailAddress,
             order: newOrder,
+            priority: priority as Priority,
             sectionId: sectionId ? sectionId : null,
         };
 

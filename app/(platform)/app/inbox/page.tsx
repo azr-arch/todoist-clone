@@ -29,6 +29,9 @@ const InboxPage = async () => {
     });
 
     const sections = await prismaDb.section.findMany({
+        where: {
+            project: null,
+        },
         include: {
             tasks: true,
         },

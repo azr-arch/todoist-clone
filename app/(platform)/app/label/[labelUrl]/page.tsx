@@ -12,7 +12,7 @@ const LabelUrlPage = async ({ params }: { params: { labelUrl: string } }) => {
     let label;
 
     try {
-        //TODO Optimize this query
+        // TODO: Optimize this query
         label = await prismaDb.label.findUnique({
             where: {
                 id: labelId,
@@ -39,8 +39,6 @@ const LabelUrlPage = async ({ params }: { params: { labelUrl: string } }) => {
                 },
             },
         });
-
-        // The label in the task, have 3 proprs, labelId, taskId, labelData, i want label to have only labelData not rest, how do i format it?
     } catch (error) {
         console.error("Internal server erorr: ", error);
     }

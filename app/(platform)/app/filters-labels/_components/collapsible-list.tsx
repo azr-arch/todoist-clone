@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronRight, Plus } from "lucide-react";
 import { useState } from "react";
 import { LabelItem } from "./label-item";
-import { Label } from "@prisma/client";
+import { Filter, Label } from "@prisma/client";
 import { LabelWithLists } from "@/lib/types";
+import { FilterItem } from "./filter-item";
 
 interface CollapsibleListProps {
     title: string;
@@ -48,17 +49,20 @@ export const CollapsibleList = ({ title, onDialogOpen, data, type }: Collapsible
 
             <div className="py-1">
                 {isOpen ? (
-                    !data ? (
+                    !data || data.length <= 0 ? (
                         <p className="text-sm font-thin text-neutral-400">
-                            Your list of labels will show up here.
+                            {type === "filter"
+                                ? "Your list of filters will show up here."
+                                : "Your list of labels will show up here."}
                         </p>
                     ) : (
                         <ul>
                             {data.map((item) => {
                                 // render filter item
                                 if (type === "filter") {
-                                    return null;
+                                    return <FilterItem key={item.id} data={item as Filter} />;
                                 } else if (type === "label") {
+                                    // render label item
                                     return <LabelItem key={item.id} data={item} />;
                                 }
                                 return null;

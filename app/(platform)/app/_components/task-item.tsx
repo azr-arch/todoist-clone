@@ -9,7 +9,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Label, Task } from "@prisma/client";
+import { Label, Priority, Task } from "@prisma/client";
 import { ArrowUpDown, Calendar, Check, Edit, MoreHorizontal, Tag, Trash } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -141,9 +141,19 @@ export const TaskItem = ({
                             <button
                                 disabled={loading}
                                 onClick={onComplete}
-                                className="disabled:opacity-50 disabled:cursor-not-allowed rounded-full w-5 h-5 bg-transparent border cursor-pointer border-neutral-400  flex items-center justify-center"
+                                className={cn(
+                                    `disabled:opacity-50 disabled:cursor-not-allowed rounded-full w-5 h-5 
+                                     border cursor-pointer  flex items-center justify-center`,
+                                    data.priority === Priority.p1
+                                        ? "border-red-400 bg-red-100 text-red-500"
+                                        : data.priority === Priority.p2
+                                        ? "border-yellow-500 bg-yellow-100 text-yellow-500"
+                                        : data.priority === Priority.p3
+                                        ? "border-blue-400 bg-blue-100 text-blue-400"
+                                        : "border-neutral-400 text-neutral-400 bg-transparent"
+                                )}
                             >
-                                <Check className="text-neutral-400 w-[14px] h-[14px] transition-opacity opacity-0 hover:opacity-100 " />
+                                <Check className="text-inherit  w-[14px] h-[14px] transition-opacity opacity-0 hover:opacity-100 " />
                             </button>
                             <p className="text-black text-sm leading-none truncate">{data.title}</p>
 

@@ -1,3 +1,4 @@
+import { Priority } from "@prisma/client";
 import { z } from "zod";
 
 export const AddTaskSchema = z.object({
@@ -12,4 +13,5 @@ export const AddTaskSchema = z.object({
     sectionType: z.string(),
     sectionId: z.optional(z.string()),
     labelId: z.optional(z.string()),
+    priority: z.optional(z.string()),
 });

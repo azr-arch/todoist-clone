@@ -2,10 +2,11 @@ import { prismaDb } from "@/lib/db";
 import { CollapsibleList } from "./_components/collapsible-list";
 import { FilterList } from "./_components/filter-list";
 import { LabelList } from "./_components/label-list";
-import { Label } from "@prisma/client";
+import { Filter, Label } from "@prisma/client";
 
 const FiltersAndLabelsPage = async () => {
     let labels: Label[];
+    let filters: Filter[];
     try {
         labels = await prismaDb.label.findMany({
             orderBy: {
@@ -15,8 +16,15 @@ const FiltersAndLabelsPage = async () => {
                 tasks: true,
             },
         });
+
+        filters = await prismaDb.filter.findMany({
+            orderBy: {
+                order: "asc",
+            },
+        });
     } catch (error) {
         labels = [];
+        filters = [];
     }
 
     return (
@@ -28,7 +36,7 @@ const FiltersAndLabelsPage = async () => {
             </div>
 
             <div className="space-y-6">
-                <FilterList />
+                <FilterList data={filters} />
                 <LabelList data={labels} />
             </div>
         </div>

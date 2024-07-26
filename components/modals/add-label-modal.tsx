@@ -14,25 +14,22 @@ import { createLabel } from "@/actions/create-label";
 import { toast } from "sonner";
 import { editLabel } from "@/actions/edit-label";
 import { useAddLabel } from "@/hooks/use-add-label-modal";
-import { useAddFilterModal } from "@/hooks/use-add-filter-modal";
-import { createFilter } from "@/actions/create-filter";
 
-interface AddFilterModalProps {
+interface AddLabelModalProps {
     isOpen: boolean;
     onClose: () => void;
     type?: "edit" | "add";
 }
 
-export const AddFilterModal = ({ type = "add", isOpen, onClose }: AddFilterModalProps) => {
+export const AddLabelModal = ({ isOpen, onClose, type = "add" }: AddLabelModalProps) => {
     const [isMounted, setIsMounted] = useState(false);
     const [name, setName] = useState("");
-    const [query, setQuery] = useState("");
 
-    const { defaultFormValue } = useAddFilterModal();
-    const { execute } = useAction(createFilter, {
+    const { defaultFormValue } = useAddLabel();
+    const { execute } = useAction(createLabel, {
         onComplete: () => {},
         onSuccess: () => {
-            toast("Filter created successfully!");
+            toast("Label created successfully!");
             onClose();
         },
         onError: (err) => {
@@ -40,59 +37,57 @@ export const AddFilterModal = ({ type = "add", isOpen, onClose }: AddFilterModal
         },
     });
 
-    // const { execute: executeEdit } = useAction(editLabel, {
-    //     onComplete: () => {
-    //         toast("Label updated successfully!");
-    //         onClose();
-    //     },
-    //     onSuccess: () => {
-    //         toast("Label updated successfully!");
-    //         onClose();
-    //     },
-    //     onError: (err) => {
-    //         console.log("error: ", err);
-    //         toast(err);
-    //     },
-    // });
+    const { execute: executeEdit } = useAction(editLabel, {
+        onComplete: () => {
+            toast("Label updated successfully!");
+            onClose();
+        },
+        onSuccess: () => {
+            toast("Label updated successfully!");
+            onClose();
+        },
+        onError: (err) => {
+            console.log("error: ", err);
+            toast(err);
+        },
+    });
 
     const onSubmit = useCallback(
         (formData: FormData) => {
             const name = formData.get("name") as string;
             const color = formData.get("color") as string;
-            const query = formData.get("query") as string;
+            const labelId = formData.get("labelId") as string;
 
             if (type === "add") {
                 execute({
                     name,
                     color,
-                    query,
                 });
 
                 return;
             }
 
             // Edit for type "edit"
-            // executeEdit({
-            //     name,
-            //     color,
-            //     labelId: labelId!,
-            // });
-            // return;
+            executeEdit({
+                name,
+                color,
+                labelId: labelId!,
+            });
+            return;
         },
-        [execute, type]
+        [execute, executeEdit, type]
     );
 
     const closeModal = useCallback(() => {
         setName("");
-        setQuery("");
         onClose();
     }, [onClose]);
 
-    // useEffect(() => {
-    //     if (defaultFormValue?.name) {
-    //         setName(defaultFormValue.name);
-    //     }
-    // }, [defaultFormValue]);
+    useEffect(() => {
+        if (defaultFormValue?.name) {
+            setName(defaultFormValue.name);
+        }
+    }, [defaultFormValue]);
 
     useEffect(() => {
         setIsMounted(true);
@@ -101,15 +96,10 @@ export const AddFilterModal = ({ type = "add", isOpen, onClose }: AddFilterModal
     if (!isMounted) return null;
 
     return (
-        <Modal title="Add filter" onClose={onClose} isOpen={isOpen}>
+        <Modal title="Add label" isOpen={isOpen} onClose={closeModal}>
             <form action={onSubmit} className="w-full space-y-4">
-                {defaultFormValue?.filterId && (
-                    <input
-                        type="hidden"
-                        name="filterId"
-                        value={defaultFormValue.filterId}
-                        readOnly
-                    />
+                {defaultFormValue?.labelId && (
+                    <input type="hidden" name="labelId" value={defaultFormValue.labelId} readOnly />
                 )}
                 <div className="space-y-1">
                     <Label>Name</Label>
@@ -124,21 +114,9 @@ export const AddFilterModal = ({ type = "add", isOpen, onClose }: AddFilterModal
                 </div>
 
                 <div className="space-y-1">
-                    <Label>Query</Label>
-                    <Input
-                        className="h-8"
-                        type="text"
-                        name="query"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        autoComplete="off"
-                    />
-                </div>
-
-                <div className="space-y-1">
                     <Label>Color</Label>
 
-                    <Select defaultValue={"#808081"} name="color">
+                    <Select defaultValue={defaultFormValue?.color ?? "#808081"} name="color">
                         <SelectTrigger>
                             <SelectValue />
                         </SelectTrigger>
@@ -162,7 +140,7 @@ export const AddFilterModal = ({ type = "add", isOpen, onClose }: AddFilterModal
                         Cancel
                     </Button>
 
-                    <FormSubmit disabled={!name || !query} label="Add" />
+                    <FormSubmit disabled={!name} label="Add" />
                 </div>
             </form>
         </Modal>

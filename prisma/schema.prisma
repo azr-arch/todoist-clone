@@ -31,6 +31,11 @@ model Task {
   section       Section? @relation(fields: [sectionId], references: [id], onDelete: Cascade) 
 
   labels        TaskLabels[]
+
+  priority      Priority @default(p4)
+
+  projectId     String? @db.Uuid
+  project       Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
  
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -66,6 +71,23 @@ model Label {
 
   @@index([name])
 }
+
+model Filter {
+  id            String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String
+  query         String
+  color         String
+
+  clerkUserId   String
+  userEmail     String?  
+
+  order         Int
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([name])
+}
 model Section {
   id            String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   clerkUserId   String
@@ -73,9 +95,32 @@ model Section {
   tasks         Task[] 
   order         Int
 
+  projectId     String? @db.Uuid
+  project       Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
   // Maybe isArchive ?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model Project {
+  id            String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clerkUserId   String
+  name          String
+  color         String
+
+  tasks         Task[]
+  sections      Section[]
+
+   createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum Priority {
+  p1
+  p2
+  p3
+  p4
 }
 
 enum ACTION {
@@ -96,3 +141,5 @@ model AuditLog {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
+
+
