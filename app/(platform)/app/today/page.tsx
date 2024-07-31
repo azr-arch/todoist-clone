@@ -3,6 +3,7 @@ import { TaskList } from "../_components/tasklist";
 import { prismaDb } from "@/lib/db";
 import { OverdueList } from "../_components/overdue-list";
 import Image from "next/image";
+import { CheckCircle } from "lucide-react";
 
 const getStartAndEndOfDay = () => {
     const today = new Date();
@@ -74,11 +75,22 @@ const TodayPage = async () => {
                 <h1 className="text-3xl font-semibold hover:outline hover:outline-1 outline-neutral-200 rounded-md">
                     Today
                 </h1>
+                {tasks.length > 0 && (
+                    <span className="text-neutral-500 text-sm font-thin flex items-center gap-x-1 mt-2 px-1">
+                        <CheckCircle className="size-3" />
+                        <span>{tasks.length}</span>
+                        task
+                    </span>
+                )}
             </div>
 
             <div className="relative">
                 <OverdueList data={overdueTasks} />
-                <TaskList data={tasks} expiredItemExists={overdueTasks.length > 0} />
+                <TaskList
+                    data={tasks}
+                    expiredItemExists={overdueTasks.length > 0}
+                    ordering="priority"
+                />
                 <AddTaskButton />
 
                 {/* Empty Page */}

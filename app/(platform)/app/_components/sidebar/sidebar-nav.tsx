@@ -2,12 +2,14 @@
 
 import { AddProjectModal } from "@/components/modals/add-project-modal";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, createFormattedNameAndUrl } from "@/lib/utils";
+import { Project } from "@prisma/client";
 import {
     CalendarDays,
     CalendarFold,
     ChevronRight,
     CircleCheck,
+    Hash,
     Inbox,
     LayoutGrid,
     Plus,
@@ -15,12 +17,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const iconStyles = "w-5 h-5";
 
-export const SidebarNav = () => {
-    const [menuOpen, setMenuOpen] = useState(false);
+export const SidebarNav = ({ projects }: { projects: Project[] }) => {
+    const [projectListOpen, setProjectListOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
 
     const pathname = usePathname();
@@ -60,9 +62,9 @@ export const SidebarNav = () => {
 
     return (
         <>
-            <AddProjectModal isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+            <AddProjectModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
 
-            <nav>
+            <nav className="">
                 <ul className="px-2 py-2">
                     <li className="flex items-center gap-x-2 px-2 py-1.5 mb-2 rounded-sm transition hover:bg-neutral-100 duration-150 cursor-pointer">
                         <PlusCircle className="w-6 h-6 text-highlight" />
@@ -88,7 +90,7 @@ export const SidebarNav = () => {
                     ))}
                 </ul>
                 <Link href={"/app/projects"}>
-                    <div className="group ">
+                    <div className=" ">
                         <div className="flex items-center bg-[#ffefe5] px-2 py-1.5 mt-5 rounded-sm ">
                             <p className=" text-black ">My Projects</p>
 
@@ -99,7 +101,7 @@ export const SidebarNav = () => {
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         e.preventDefault();
-                                        setMenuOpen(true);
+                                        setModalOpen(true);
                                     }}
                                 >
                                     <Plus className="size-4 text-neutral-400 hover:text-black" />
@@ -109,13 +111,14 @@ export const SidebarNav = () => {
                                     size={"xs"}
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        setMenuOpen(!menuOpen);
+                                        e.preventDefault();
+                                        setProjectListOpen(!projectListOpen);
                                     }}
                                 >
                                     <ChevronRight
                                         className={cn(
                                             `size-4 text-neutral-400 hover:text-black transition-transform duration-200`,
-                                            menuOpen ? "rotate-90" : "rotate-0"
+                                            projectListOpen ? "rotate-90" : "rotate-0"
                                         )}
                                     />
                                 </Button>
@@ -124,9 +127,35 @@ export const SidebarNav = () => {
                     </div>
                 </Link>
 
-                {/* <ol>
-                    {}
-                </ol> */}
+                {projectListOpen && projects.length > 0 ? (
+                    <ul>
+                        {projects.map((project) => {
+                            const { projectUrl } = createFormattedNameAndUrl(
+                                project.name,
+                                project.id
+                            );
+
+                            return (
+                                <li
+                                    key={project.id}
+                                    className="px-4  my-2 py-2 rounded-sm flex items-center justify-between w-[90%] mx-auto hover:bg-neutral-200 transition-colors"
+                                >
+                                    <Link href={projectUrl}>
+                                        <div className=" flex items-center gap-x-3  transition-colors">
+                                            <Hash
+                                                className="size-4"
+                                                style={{ color: project.color }}
+                                            />
+                                            <span className="text-sm text-black font-thin">
+                                                {project.name}
+                                            </span>
+                                        </div>
+                                    </Link>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                ) : null}
             </nav>
         </>
     );

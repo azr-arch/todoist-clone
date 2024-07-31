@@ -15,11 +15,15 @@ import { Priority } from "@prisma/client";
 
 interface PrioritySelectProps {
     label?: string;
+    className?: string;
+    btnClassName?: string;
+    defaultValue?: Priority;
 }
 
 export const PrioritySelect = forwardRef<HTMLInputElement, PrioritySelectProps>(
-    ({ label }, ref) => {
+    ({ label, btnClassName, defaultValue }, ref) => {
         const { pending } = useFormStatus();
+
         return (
             <div className="w-full">
                 <div className="space-y-1 w-full">
@@ -32,16 +36,22 @@ export const PrioritySelect = forwardRef<HTMLInputElement, PrioritySelectProps>(
                         </Label>
                     ) : null}
                 </div>
-                <Select disabled={pending} defaultValue={Priority.p4} name="priority">
-                    <SelectTrigger>
-                        <SelectValue defaultValue={Priority.p4} />
+                <Select
+                    disabled={pending}
+                    defaultValue={defaultValue || Priority.p4}
+                    name="priority"
+                >
+                    <SelectTrigger className={cn("", btnClassName)}>
+                        <SelectValue className="" defaultValue={Priority.p4} />
                     </SelectTrigger>
                     <SelectContent>
                         {PRIORITY.map((item) => (
-                            <SelectItem key={item.value} value={item.value}>
-                                <div className="flex items-center w-full gap-x-1">
-                                    <Flag className={cn(item.className, "size-4 ")} />
-                                    <span className="text-xs text-neutral-600">{item.label}</span>
+                            <SelectItem key={item.value} value={item.value} className="">
+                                <div className="flex items-center w-full gap-x-4 ">
+                                    <Flag className={cn(item.className, "size-4 stroke-1")} />
+                                    <span className="text-sm font-thin text-neutral-600">
+                                        {item.label}
+                                    </span>
                                 </div>
                             </SelectItem>
                         ))}

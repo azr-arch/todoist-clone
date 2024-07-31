@@ -14,4 +14,5 @@ export const AddTaskSchema = z.object({
     sectionId: z.optional(z.string()),
     labelId: z.optional(z.string()),
     priority: z.optional(z.string()),
+    projectId: z.optional(z.string()),
 });

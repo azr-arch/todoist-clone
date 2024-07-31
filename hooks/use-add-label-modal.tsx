@@ -15,6 +15,7 @@ type AddLabelModal = {
 };
 
 export const useAddLabel = create<AddLabelModal>((set) => ({
+    defaultFormValue: undefined,
     isOpen: false,
     onOpen: (data) => set({ isOpen: true, defaultFormValue: data }),
     onClose: () => set({ isOpen: false, defaultFormValue: undefined }),

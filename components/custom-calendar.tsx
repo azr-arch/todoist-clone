@@ -12,12 +12,51 @@ import { Input } from "./ui/input";
 interface CustomCalendarProps {
     tasks?: Task[];
     defaultValue?: Date;
+    className?: string;
+    btnClassName?: string;
+    align?: "end" | "center" | "start";
+    side?: "right" | "top" | "bottom" | "left";
 }
 
-export function CustomCalendar({ tasks, defaultValue }: CustomCalendarProps) {
-    const [date, setDate] = useState<Date | undefined>(defaultValue ? defaultValue : undefined);
+const menuItems = [
+    {
+        label: "Tomorrow",
+        value: addDays(new Date(), 1),
+        icon: <Sun className="w-4 h-4 text-orange-500 mr-4 " />,
+    },
+    {
+        label: "This Weekend",
+        value: startOfWeek(addDays(new Date(), 5), { weekStartsOn: 6 }),
+        icon: <Sofa className="w-4 h-4 text-blue-400 mr-4" />,
+    },
+    {
+        label: "Next Week",
+        value: startOfWeek(addWeeks(new Date(), 1), { weekStartsOn: 1 }),
+        icon: <CalendarClockIcon className="w-4 h-4 text-violet-500 mr-4" />,
+    },
+    {
+        label: "No Date",
+        value: undefined,
+        icon: <CircleOff className="w-4 h-4 text-neutral-500 mr-4" />,
+    },
+];
 
-    console.log({ defaultValue, date });
+export function CustomCalendar({
+    tasks,
+    defaultValue,
+    className,
+    btnClassName,
+    align = "center",
+    side = "right",
+}: CustomCalendarProps) {
+    const [date, setDate] = useState<Date | undefined>(() => {
+        if (defaultValue && defaultValue instanceof Date) {
+            return defaultValue;
+        } else if (typeof defaultValue === "string") {
+            return new Date(defaultValue);
+        }
+        return undefined;
+    });
     const [open, setOpen] = useState(false);
 
     const [stringDate, setStringDate] = React.useState<string>("");
@@ -33,29 +72,6 @@ export function CustomCalendar({ tasks, defaultValue }: CustomCalendarProps) {
         setOpen(false);
     };
 
-    const menuItems = [
-        {
-            label: "Tomorrow",
-            value: addDays(new Date(), 1),
-            icon: <Sun className="w-4 h-4 text-orange-500 mr-4 " />,
-        },
-        {
-            label: "This Weekend",
-            value: startOfWeek(addDays(new Date(), 5), { weekStartsOn: 6 }),
-            icon: <Sofa className="w-4 h-4 text-blue-400 mr-4" />,
-        },
-        {
-            label: "Next Week",
-            value: startOfWeek(addWeeks(new Date(), 1), { weekStartsOn: 1 }),
-            icon: <CalendarClockIcon className="w-4 h-4 text-violet-500 mr-4" />,
-        },
-        {
-            label: "No Date",
-            value: undefined,
-            icon: <CircleOff className="w-4 h-4 text-neutral-500 mr-4" />,
-        },
-    ];
-
     // TODO implement task count on calendar dates
     // const getTaskCountForDate = (date: Date) => {
     //     return tasks.filter(
@@ -68,7 +84,7 @@ export function CustomCalendar({ tasks, defaultValue }: CustomCalendarProps) {
 
     useEffect(() => {
         if (dateRef.current && date) {
-            dateRef.current.value = date.toDateString();
+            dateRef.current.value = date?.toDateString();
         }
     }, [date]);
 
@@ -77,23 +93,25 @@ export function CustomCalendar({ tasks, defaultValue }: CustomCalendarProps) {
             <input
                 type="hidden"
                 ref={dateRef}
-                value={date ? date.toDateString() : ""}
+                value={date && date instanceof Date ? date.toDateString() : ""}
                 name="dueDate"
             />
-            <Popover open={open} onOpenChange={setOpen}>
+            <Popover open={open} defaultOpen={true} onOpenChange={() => setOpen((prev) => !prev)}>
                 <PopoverTrigger asChild>
                     <Button
                         variant="outline"
                         className={cn(
                             "justify-start text-left font-thin",
-                            !date && "text-muted-foreground"
+                            !date && "text-muted-foreground",
+                            open && "bg-neutral-100",
+                            btnClassName
                         )}
                     >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        <CalendarIcon className="mr-2 h-4 w-4 stroke-1" />
                         {date ? formatDate(date) : <span className="text-sm f">Due date</span>}
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-fit p-0" align="start">
+                <PopoverContent className={cn(` p-0 `, className)} align={align} side={side}>
                     <div className="relative">
                         <Input
                             type="string"
@@ -127,6 +145,7 @@ export function CustomCalendar({ tasks, defaultValue }: CustomCalendarProps) {
                         {menuItems.map((item) => (
                             <li key={item.label} className="w-full">
                                 <Button
+                                    type="button"
                                     className="w-full flex items-center justify-start font-thin px-2"
                                     variant={"ghost"}
                                     onClick={() => setDate(item.value)}

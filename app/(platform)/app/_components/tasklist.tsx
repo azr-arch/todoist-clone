@@ -15,12 +15,19 @@ interface TaskListProps {
     data?: Task[];
     className?: string;
     expiredItemExists?: boolean;
-    label?: Label;
+    ordering?: "priority" | "order";
+    // Add ordering variable that will help in organize the list
+    // Like some page where this component used, prefers the tasks to be ordered with data.order not data.prooirty
 }
 
 const priorityOrder = [Priority.p1, Priority.p2, Priority.p3, Priority.p4];
 
-export const TaskList = ({ data, className, expiredItemExists, label }: TaskListProps) => {
+export const TaskList = ({
+    data,
+    className,
+    expiredItemExists,
+    ordering = "order",
+}: TaskListProps) => {
     const [orderedData, setOrderedData] = useState(data);
 
     const { execute } = useAction(updateTaskOrder, {
@@ -34,7 +41,7 @@ export const TaskList = ({ data, className, expiredItemExists, label }: TaskList
         },
     });
 
-    // TODO: Fix reordering
+    // TODO: Fix reordering when ordering === "priority"
     const onDragEnd = (result: DropResult) => {
         const { source, destination } = result;
 
@@ -49,9 +56,11 @@ export const TaskList = ({ data, className, expiredItemExists, label }: TaskList
         const destTask = orderedData[destination.index];
 
         // Prevent reordering between different priority levels
-        if ((sourceTask.priority || "p4") !== (destTask.priority || "p4")) {
-            toast("Cannot reorder tasks with different priorities");
-            return;
+        if (ordering === "priority") {
+            if ((sourceTask.priority || "p4") !== (destTask.priority || "p4")) {
+                toast("Cannot reorder tasks with different priorities");
+                return;
+            }
         }
 
         // Create a deep copy of the objects within orderedData
@@ -87,22 +96,24 @@ export const TaskList = ({ data, className, expiredItemExists, label }: TaskList
 
     useEffect(() => {
         if (data) {
-            const sortedData = [...data].sort((a, b) => {
-                const priorityA = a.priority || "p4";
-                const priorityB = b.priority || "p4";
-                const priorityDiff =
-                    priorityOrder.indexOf(priorityA) - priorityOrder.indexOf(priorityB);
-                return priorityDiff !== 0 ? priorityDiff : a.order - b.order;
-            });
-            setOrderedData(sortedData);
+            if (ordering === "order") {
+                setOrderedData(data);
+            } else {
+                const sortedData = [...data].sort((a, b) => {
+                    const priorityA = a.priority || "p4";
+                    const priorityB = b.priority || "p4";
+                    const priorityDiff =
+                        priorityOrder.indexOf(priorityA) - priorityOrder.indexOf(priorityB);
+                    return priorityDiff !== 0 ? priorityDiff : a.order - b.order;
+                });
+
+                setOrderedData(sortedData);
+            }
         }
-    }, [data]);
+    }, [data, ordering]);
 
     return (
         <div className="w-full  ">
-            {/* For now this heading is only available in inbox page */}
-
-            {/* Todo: reimplement date heading  */}
             {expiredItemExists && (
                 <h2 className=" w-full font-medium px-2 mb-4 text-black inline-flex items-center border-b border-b-muted">
                     {generateHeading(new Date())}
@@ -110,15 +121,47 @@ export const TaskList = ({ data, className, expiredItemExists, label }: TaskList
             )}
             {orderedData && orderedData.length > 0 ? (
                 <DragDropContext onDragEnd={onDragEnd}>
-                    {/* <Droppable droppableId="tasks" type="task" direction="vertical">
-                        {(provided) => (
-                            <ul
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                                className="space-y-4 w-full"
+                    {ordering === "priority" ? (
+                        // Priority-based ordering
+                        priorityOrder.map((priority) => (
+                            <Droppable
+                                key={priority}
+                                droppableId={`priority-${priority}`}
+                                type="task"
+                                direction="vertical"
                             >
-                                {orderedData.map((task, idx) => {
-                                    return (
+                                {(provided) => (
+                                    <ul
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                        className="space-y-4 my-4"
+                                    >
+                                        {orderedData
+                                            .filter((task) => task.priority === priority)
+                                            .map((task, idx) => (
+                                                <li key={task.id}>
+                                                    <TaskItem
+                                                        index={idx}
+                                                        className={className}
+                                                        data={task}
+                                                    />
+                                                </li>
+                                            ))}
+                                        {provided.placeholder}
+                                    </ul>
+                                )}
+                            </Droppable>
+                        ))
+                    ) : (
+                        // Order-based ordering
+                        <Droppable droppableId="tasks" type="task" direction="vertical">
+                            {(provided) => (
+                                <ul
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                    className="space-y-4 w-full"
+                                >
+                                    {orderedData.map((task, idx) => (
                                         <li key={task.id}>
                                             <TaskItem
                                                 index={idx}
@@ -126,42 +169,12 @@ export const TaskList = ({ data, className, expiredItemExists, label }: TaskList
                                                 data={task}
                                             />
                                         </li>
-                                    );
-                                })}
-
-                                {provided.placeholder}
-                            </ul>
-                        )}
-                    </Droppable> */}
-                    {priorityOrder.map((priority) => (
-                        <Droppable
-                            key={priority}
-                            droppableId={`priority-${priority}`}
-                            type="task"
-                            direction="vertical"
-                        >
-                            {(provided) => (
-                                <ul
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                    className="space-y-4 my-4"
-                                >
-                                    {orderedData
-                                        .filter((task) => task.priority === priority)
-                                        .map((task, idx) => (
-                                            <li key={task.id}>
-                                                <TaskItem
-                                                    index={idx}
-                                                    className={className}
-                                                    data={task}
-                                                />
-                                            </li>
-                                        ))}
+                                    ))}
                                     {provided.placeholder}
                                 </ul>
                             )}
                         </Droppable>
-                    ))}
+                    )}
                 </DragDropContext>
             ) : null}
         </div>

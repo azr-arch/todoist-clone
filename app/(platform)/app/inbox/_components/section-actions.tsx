@@ -17,11 +17,12 @@ import { CopyPlus, Edit, MoreHorizontal, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { deleteSection } from "@/actions/delete-section";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { FormSubmit } from "@/components/form/form-submit";
 import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 
-const ACTIONS_ICON_STYLES = "w-5 h-5 mr-3 text-[#828282]";
+export const ACTIONS_ICON_STYLES = "w-5 h-5 mr-3 text-inherit stroke-1";
 
 interface SectionActionsProps {
     data: SectionWithLists;
@@ -29,6 +30,20 @@ interface SectionActionsProps {
 }
 
 export const SectionActions = ({ data, enableEditing }: SectionActionsProps) => {
+    const pathname = usePathname();
+
+    const extractProjectId = useCallback(() => {
+        return pathname.split("_")[1];
+    }, [pathname]);
+
+    const projectId = useMemo(
+        () =>
+            pathname.includes("/app/project")
+                ? extractProjectId() // Extract projectId from url
+                : undefined,
+        [extractProjectId, pathname]
+    );
+
     const { execute: executeCopy, isLoading } = useAction(copySection, {
         onSuccess: () => {
             toast("Section copied successfully");
@@ -53,9 +68,10 @@ export const SectionActions = ({ data, enableEditing }: SectionActionsProps) => 
 
             executeCopy({
                 sectionId,
+                projectId,
             });
         },
-        [executeCopy]
+        [executeCopy, projectId]
     );
 
     const onDelete = useCallback(

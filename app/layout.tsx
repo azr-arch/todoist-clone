@@ -3,6 +3,8 @@ import { Kanit } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import { ModalProvider } from "@/components/providers/modal.provider";
+import { QueryProvider } from "@/components/providers/query-provider";
 
 const kanit = Kanit({ weight: ["300", "400", "500", "600", "700"], subsets: ["latin"] });
 
@@ -18,10 +20,13 @@ export default function RootLayout({
 }>) {
     return (
         <ClerkProvider>
-            <html lang="en">
-                <body className={kanit.className}>{children}</body>
-                <Toaster />
-            </html>
+            <QueryProvider>
+                <html lang="en">
+                    <body className={kanit.className}>{children}</body>
+                    <Toaster />
+                    <ModalProvider />
+                </html>
+            </QueryProvider>
         </ClerkProvider>
     );
 }

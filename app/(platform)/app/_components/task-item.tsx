@@ -18,6 +18,8 @@ import { cn, formatDate } from "@/lib/utils";
 
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { EditTaskForm } from "./task-form/edit-task-form";
+import { TaskModal } from "@/components/modals/task-modal";
+import { useTaskModal } from "@/hooks/use-task-modal";
 
 export const TaskItem = ({
     data,
@@ -37,6 +39,7 @@ export const TaskItem = ({
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
+    const { onOpen } = useTaskModal();
 
     const enableEditing = () => {
         setIsEditing(true);
@@ -120,14 +123,17 @@ export const TaskItem = ({
                 confirmLabel="Delete"
                 title="Delete Task?"
             />
+
             <Draggable draggableId={data.id} index={index}>
                 {(provided) => (
                     <div
                         {...provided.draggableProps}
                         ref={provided.innerRef}
                         className={cn(
-                            "w-full border-b h-fit min-h-[55px] border-b-neutral-200 px-2 flex flex-col justify-between pb-2 items-start group"
+                            "w-full border-b cursor-pointer h-fit min-h-[55px] border-b-neutral-200 px-2 flex gap-2 flex-col justify-between pb-2 items-start group",
+                            className
                         )}
+                        onClick={() => onOpen(data.id)}
                     >
                         <div className="flex items-center gap-x-4 relative w-full">
                             <div
@@ -142,8 +148,8 @@ export const TaskItem = ({
                                 disabled={loading}
                                 onClick={onComplete}
                                 className={cn(
-                                    `disabled:opacity-50 disabled:cursor-not-allowed rounded-full w-5 h-5 
-                                     border cursor-pointer  flex items-center justify-center`,
+                                    `disabled:opacity-50 disabled:cursor-not-allowed rounded-full size-4 self-center
+                                     border cursor-pointer   flex items-center justify-center`,
                                     data.priority === Priority.p1
                                         ? "border-red-400 bg-red-100 text-red-500"
                                         : data.priority === Priority.p2
@@ -153,14 +159,19 @@ export const TaskItem = ({
                                         : "border-neutral-400 text-neutral-400 bg-transparent"
                                 )}
                             >
-                                <Check className="text-inherit  w-[14px] h-[14px] transition-opacity opacity-0 hover:opacity-100 " />
+                                <Check className="text-inherit size-3 transition-opacity opacity-0 hover:opacity-100 " />
                             </button>
-                            <p className="text-black text-sm leading-none truncate">{data.title}</p>
+
+                            <h3 className="text-black  font-thin text-sm leading-normal ">
+                                {data.title}
+                            </h3>
 
                             {/* Actions */}
                             <DropdownMenu>
                                 <DropdownMenuTrigger className="ml-auto">
-                                    <MoreHorizontal className="w-4 h-4" />
+                                    <Button variant={"ghost"} size="icon">
+                                        <MoreHorizontal className="size-5" />
+                                    </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
                                     className="w-[251px]"
@@ -195,7 +206,7 @@ export const TaskItem = ({
 
                         <div className="ml-8 ">
                             {data.description && (
-                                <p className="font-thin ml-1 text-neutral-500 text-xs leading-relaxed">
+                                <p className="font-thin ml-1 text-neutral-500 text-[13px] leading-relaxed">
                                     {data.description}
                                 </p>
                             )}

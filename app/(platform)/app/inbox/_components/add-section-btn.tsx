@@ -6,12 +6,15 @@ import { FormSubmit } from "@/components/form/form-submit";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAction } from "@/hooks/use-action";
-import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 
 export const AddSectionBtn = ({ prevOrder = 0 }: { prevOrder?: number }) => {
     // what do i name the state that will handle rendering of Adding section form
     const [showSectionForm, setShowSectionForm] = useState(false);
+
+    const pathname = usePathname();
 
     const enableSectionForm = () => {
         setShowSectionForm(true);
@@ -43,18 +46,39 @@ export const AddSectionBtn = ({ prevOrder = 0 }: { prevOrder?: number }) => {
 function SectionTitleForm({ onClose, prevOrder }: { onClose: () => void; prevOrder: number }) {
     const [inputValue, setInputValue] = useState("");
     const inputRef = useRef<HTMLInputElement | null>(null);
+
+    const pathname = usePathname();
+
+    const extractUrl = useCallback(() => {
+        return pathname.split("_")[1];
+    }, [pathname]);
+
+    const projectId = useMemo(
+        () =>
+            pathname.includes("/app/project")
+                ? extractUrl() // Extract projectId from url
+                : null,
+        [extractUrl, pathname]
+    );
+
     const { execute } = useAction(createSection, {
         onSuccess: () => {
+            console.log("success");
             onClose();
         },
+        onError: (err) => console.log(err),
+        onComplete: () => console.log("completed"),
     });
 
     const handleSubmit = (formData: FormData) => {
         const sectionTitle = formData.get("sectionTitle") as string;
+        const projectId = formData.get("projectId") as string;
+        console.log({ sectionTitle, projectId });
 
         execute({
             title: sectionTitle,
             prevOrder: prevOrder,
+            projectId: projectId ? projectId : undefined,
         });
     };
 
@@ -75,6 +99,8 @@ function SectionTitleForm({ onClose, prevOrder }: { onClose: () => void; prevOrd
                 />
             </div>
             <div className="flex items-center gap-x-2 ">
+                {projectId && <input type="hidden" name="projectId" value={projectId} />}
+
                 <FormSubmit label="Add section" disabled={!inputValue} />
 
                 <Button onClick={onClose} type="button" variant={"ghost"}>

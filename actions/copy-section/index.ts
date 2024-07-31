@@ -17,7 +17,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     }
 
-    const { sectionId } = data;
+    const { sectionId, projectId } = data;
     let section: Section;
 
     try {
@@ -55,6 +55,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 title: `Copy of ${sectionToCopy.title}`,
                 clerkUserId: user.id,
                 order: newOrder,
+                projectId: projectId ? projectId : undefined,
             },
         });
 

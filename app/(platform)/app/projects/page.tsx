@@ -29,8 +29,6 @@ const ProjectPage = async () => {
             </div>
 
             <div>
-                {/* Loop over tasks, and differentiately render them according to dates */}
-                {/* <UpcomingList data={upcomingTasks} /> */}
                 <ProjectList data={projects} />
             </div>
         </div>

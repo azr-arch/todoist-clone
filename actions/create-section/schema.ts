@@ -8,4 +8,5 @@ export const CreateSectionSchema = z.object({
         })
         .min(1),
     prevOrder: z.number(),
+    projectId: z.optional(z.string()),
 });

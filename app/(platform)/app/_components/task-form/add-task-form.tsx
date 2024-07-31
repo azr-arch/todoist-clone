@@ -57,15 +57,30 @@ export const AddTaskForm = ({ onCloseForm, sectionId, labelId }: AddTaskFormProp
         [pathname]
     );
 
+    const extractProjectId = useCallback(() => {
+        return pathname.split("_")[1];
+    }, [pathname]);
+
+    const projectId = useMemo(
+        () =>
+            pathname.includes("/app/project")
+                ? extractProjectId() // Extract projectId from url
+                : undefined,
+        [extractProjectId, pathname]
+    );
+
     const onSubmit = useCallback(
         async (formData: FormData) => {
             if (!inputRef.current?.value) return;
+
+            console.log("Task add submitting....");
 
             const title = formData.get("title") as string;
             const desc = formData.get("description") as string;
             const dueDate = formData.get("dueDate") as string;
             const sectionType = formData.get("sectionType") as string;
             const priority = formData.get("priority") as Priority;
+            // const projectId = formData.get("projectId") as string;
 
             execute({
                 title,
@@ -75,9 +90,10 @@ export const AddTaskForm = ({ onCloseForm, sectionId, labelId }: AddTaskFormProp
                 sectionId, // If section id is present then it belongs to, a section group ..
                 labelId, // If label id is present
                 priority,
+                projectId,
             });
         },
-        [execute, labelId, sectionId]
+        [execute, labelId, projectId, sectionId]
     );
 
     useEffect(() => {
@@ -125,6 +141,10 @@ export const AddTaskForm = ({ onCloseForm, sectionId, labelId }: AddTaskFormProp
                             value={formatSectionType}
                             readOnly
                         />
+
+                        {projectId ? (
+                            <input name="projectId" type="hidden" value={projectId} readOnly />
+                        ) : null}
 
                         <div className="ml-auto space-x-2">
                             <Button

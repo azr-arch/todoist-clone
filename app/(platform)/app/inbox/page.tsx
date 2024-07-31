@@ -5,6 +5,7 @@ import { Task } from "@prisma/client";
 import { TaskItem } from "../_components/task-item";
 import { AddSectionBtn } from "./_components/add-section-btn";
 import { SectionContainer } from "./_components/section-container";
+import Image from "next/image";
 
 const InboxPage = async () => {
     const tasks = await prismaDb.task.findMany({
@@ -13,6 +14,9 @@ const InboxPage = async () => {
                 not: true,
             },
             sectionId: {
+                equals: null,
+            },
+            projectId: {
                 equals: null,
             },
         },
@@ -30,7 +34,7 @@ const InboxPage = async () => {
 
     const sections = await prismaDb.section.findMany({
         where: {
-            project: null,
+            projectId: null,
         },
         include: {
             tasks: true,
@@ -39,10 +43,6 @@ const InboxPage = async () => {
             order: "asc",
         },
     });
-
-    if (!tasks) {
-        return <h1>No task found</h1>;
-    }
 
     return (
         <div className="h-full">
@@ -53,7 +53,7 @@ const InboxPage = async () => {
                     </h1>
                 </div>
                 <div className="px-4">
-                    <TaskList data={tasks} className="h-[58px]" />
+                    <TaskList data={tasks} className="h-fit gap-0" />
                     <AddTaskButton />
                 </div>
 
@@ -61,6 +61,8 @@ const InboxPage = async () => {
                 <div className="my-1">
                     <AddSectionBtn prevOrder={0} />
                 </div>
+
+                {!tasks || (tasks.length <= 0 && <EmptyLists />)}
             </div>
 
             <SectionContainer data={sections} />
@@ -70,27 +72,19 @@ const InboxPage = async () => {
 
 export default InboxPage;
 
-// function InboxTaskList({ data }: { data?: Task[] }) {
-//     return (
-//         <div className="w-full  ">
-//             {data && data.length > 0 ? (
-//                 <ul className="space-y-4 w-full">
-//                     {data.map((task) => {
-//                         return (
-//                             <li key={task.id}>
-//                                 <TaskItem
-//                                     data={task}
-//                                     dueDateVisible={true}
-//                                     className="h-[58px] bg-black"
-//                                 />
-//                             </li>
-//                         );
-//                     })}
-//                 </ul>
-//             ) : (
-//                 // <EmptyLists />
-//                 <p>Empty</p>
-//             )}
-//         </div>
-//     );
-// }
+function EmptyLists() {
+    return (
+        <div className="w-full mx-auto flex flex-col max-w-[300px] items-center justify-center ">
+            <div className="w-[200px] h-[200px] relative">
+                <Image src={"/assets/bag.png"} fill alt="bag" />
+            </div>
+
+            <div className="space-y-2 text-center">
+                <h4 className="font-medium leading-none">Your peace of mind is priceless</h4>
+                <p className="text-sm text-neutral-300 ">
+                    Well done! All your tasks are organized in the right place.
+                </p>
+            </div>
+        </div>
+    );
+}

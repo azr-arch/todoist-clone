@@ -104,6 +104,10 @@ export const SectionHeader = ({ data, isOpen, toggleListOpen }: SectionHeaderPro
                             onDoubleClick={enableEditing}
                         >
                             {title}
+
+                            <span className="text-xs font-thin text-neutral-500 ml-3">
+                                {data?.tasks?.length}
+                            </span>
                         </h3>
 
                         {data && <SectionActions data={data} enableEditing={enableEditing} />}

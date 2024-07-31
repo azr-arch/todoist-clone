@@ -19,6 +19,15 @@ export const PathBasedButtons = () => {
                     Filters & Labels /
                 </Link>
             ) : null}
+
+            {pathname.includes("/app/project") ? (
+                <Link
+                    href={"/app/projects"}
+                    className="px-1 text-xs py-1.5 rounded-sm text-neutral-500 hover:bg-neutral-100 hover:text-black transition-colors"
+                >
+                    My Projects /
+                </Link>
+            ) : null}
         </div>
     );
 };

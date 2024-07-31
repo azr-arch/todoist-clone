@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Modal } from "../ui/modal";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -11,15 +11,23 @@ import { FormSubmit } from "../form/form-submit";
 import { useAction } from "@/hooks/use-action";
 import { createProject } from "@/actions/create-project";
 import { toast } from "sonner";
+import { updateProject } from "@/actions/update-project";
 
 interface AddProjectModalProps {
     isOpen: boolean;
     onClose: () => void;
+    defaultFormValues?: {
+        name: string;
+        color: string;
+        projectId: string;
+    };
 }
 
-export const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
+// Modal works for both add and edit action
+
+export const AddProjectModal = ({ isOpen, onClose, defaultFormValues }: AddProjectModalProps) => {
     const [isMounted, setIsMounted] = useState(false);
-    const [name, setName] = useState("");
+    const [name, setName] = useState(defaultFormValues?.name || "");
 
     const { execute, isLoading } = useAction(createProject, {
         onComplete: () => {
@@ -32,15 +40,43 @@ export const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
         },
     });
 
-    const onSubmit = (formData: FormData) => {
-        const name = formData.get("name") as string;
-        const color = formData.get("color") as string;
+    const { execute: executeEdit } = useAction(updateProject, {
+        onComplete: () => {},
+        onSuccess: () => {
+            console.log("success");
+            toast("Project updated successfully!");
+            onClose();
+        },
+        onError: (err) => {
+            toast(err);
+        },
+    });
 
-        execute({
-            name,
-            color,
-        });
-    };
+    const onSubmit = useCallback(
+        (formData: FormData) => {
+            const projectId = formData.get("projectId") as string;
+            const name = formData.get("name") as string;
+            const color = formData.get("color") as string;
+
+            // If formValues are present, then its edit modal
+            if (defaultFormValues) {
+                // Cancel the edit if no changes are made
+                if (name === defaultFormValues.name && color === defaultFormValues.color) return;
+                executeEdit({
+                    name,
+                    color,
+                    projectId,
+                });
+                return;
+            }
+
+            execute({
+                name,
+                color,
+            });
+        },
+        [defaultFormValues, execute, executeEdit]
+    );
 
     useEffect(() => {
         setIsMounted(true);
@@ -51,9 +87,14 @@ export const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
     return (
         <Modal title="Add project" isOpen={isOpen} onClose={onClose}>
             <form className="w-full space-y-4" action={onSubmit}>
-                {/* {defaultFormValue?.labelId && (
-                    <input type="hidden" name="labelId" value={defaultFormValue.labelId} readOnly />
-                )} */}
+                {defaultFormValues?.projectId && (
+                    <input
+                        type="hidden"
+                        name="projectId"
+                        value={defaultFormValues.projectId}
+                        readOnly
+                    />
+                )}
                 <div className="space-y-1">
                     <Label>Name</Label>
                     <Input
@@ -69,7 +110,7 @@ export const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
                 <div className="space-y-1">
                     <Label>Color</Label>
 
-                    <Select defaultValue={"#808081"} name="color">
+                    <Select defaultValue={defaultFormValues?.color || "#808081"} name="color">
                         <SelectTrigger>
                             <SelectValue />
                         </SelectTrigger>
@@ -96,7 +137,14 @@ export const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
                 </div>
                 {/* Implement workspace, layout view */}
                 <div className="w-full flex items-center justify-end gap-x-2">
-                    <Button type="button" onClick={onClose} variant="outline">
+                    <Button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onClose();
+                        }}
+                        variant="outline"
+                    >
                         Cancel
                     </Button>
 

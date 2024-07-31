@@ -16,7 +16,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     }
 
-    const { title, prevOrder } = data;
+    const { title, prevOrder, projectId } = data;
+    console.log("in actions: ", projectId);
+
     let section;
 
     try {
@@ -38,13 +40,19 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             newOrder = Math.floor((prevOrder + nextSection.order) / 2);
         }
 
+        const taskData: any = {
+            clerkUserId: user.id,
+            title,
+            order: newOrder,
+        };
+
+        if (projectId) {
+            taskData.projectId = projectId;
+        }
+
         // Create the new section with the calculated order
         section = await prismaDb.section.create({
-            data: {
-                clerkUserId: user.id,
-                title,
-                order: newOrder,
-            },
+            data: taskData,
         });
     } catch (error) {
         console.log("[CREATE_SECTION]: ", error);

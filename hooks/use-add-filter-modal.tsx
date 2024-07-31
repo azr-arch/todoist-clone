@@ -16,6 +16,7 @@ type AddFilterModal = {
 };
 
 export const useAddFilterModal = create<AddFilterModal>((set) => ({
+    defaultFormValue: undefined,
     isOpen: false,
     onOpen: (data) => set({ isOpen: true, defaultFormValue: data }),
     onClose: () => set({ isOpen: false, defaultFormValue: undefined }),

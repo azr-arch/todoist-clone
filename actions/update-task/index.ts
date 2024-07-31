@@ -6,6 +6,7 @@ import { UpdateTaskSchema } from "./schema";
 import { prismaDb } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { Priority } from "@prisma/client";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const user = await currentUser();
@@ -20,14 +21,21 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     let task;
 
     try {
+        let data = {
+            ...values,
+
+            dueDate: values.dueDate ? new Date(values.dueDate) : null,
+        };
+
+        if (values.priority) {
+            data.priority = values.priority as Priority;
+        }
+
         task = await prismaDb.task.update({
             where: {
                 id: taskId,
             },
-            data: {
-                ...values,
-                dueDate: values.dueDate ? new Date(values.dueDate) : null,
-            },
+            data: data,
         });
 
         // Will add audit logs here for actions like update, delete or create!

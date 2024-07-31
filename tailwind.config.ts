@@ -10,6 +10,11 @@ const config = {
     ],
     prefix: "",
     theme: {
+        screens: {
+            xs: "580px",
+            md: "768px",
+            lg: "1024px",
+        },
         container: {
             center: true,
             padding: "2rem",
@@ -18,6 +23,9 @@ const config = {
             },
         },
         extend: {
+            gridTemplateColumns: {
+                auto_200: `1fr 200px`,
+            },
             textColor: {
                 main: "#373737",
             },

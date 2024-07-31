@@ -6,7 +6,7 @@ import { AddTaskSchema } from "./schema";
 import { prismaDb } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { Priority } from "@prisma/client";
+import { Priority, Task } from "@prisma/client";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const user = await currentUser();
@@ -17,7 +17,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     }
 
-    const { title, description, dueDate, sectionType, sectionId, labelId, priority } = data;
+    const { title, description, dueDate, sectionType, sectionId, labelId, priority, projectId } =
+        data;
     console.log({ sectionId });
     let task;
 
@@ -30,7 +31,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
         const newOrder = lastTask ? lastTask.order + 1 : 1;
 
-        const taskData = {
+        const taskData: any = {
             clerkUserId: user.id,
             title,
             description,
@@ -40,6 +41,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             order: newOrder,
             priority: priority as Priority,
             sectionId: sectionId ? sectionId : null,
+            projectId: projectId ? projectId : null,
         };
 
         if (labelId) {

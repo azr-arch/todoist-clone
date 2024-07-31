@@ -48,3 +48,10 @@ export const generateHeading = (date: Date) => {
 const today = new Date();
 console.log(generateHeading(today)); // Output: "18 Jul ‧ Today ‧ Thursday"
 -------------------------------------------------------------------------- */
+
+export const createFormattedNameAndUrl = (name: string, id: string) => {
+    const formattedProjectName = name.replace(/\s+/g, "-");
+    const projectUrl = `/app/project/${formattedProjectName}_${id}`;
+
+    return { formattedProjectName, projectUrl };
+};
