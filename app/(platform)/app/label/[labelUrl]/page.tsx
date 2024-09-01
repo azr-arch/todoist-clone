@@ -52,7 +52,7 @@ const LabelUrlPage = async ({ params }: { params: { labelUrl: string } }) => {
             </div>
 
             {label?.tasks && label.tasks.length > 0 ? (
-                <TaskList data={label.tasks.map((item) => item.task)} label={label} />
+                <TaskList data={label.tasks.map((item) => item.task)} />
             ) : null}
 
             <div>

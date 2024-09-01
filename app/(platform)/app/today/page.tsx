@@ -100,7 +100,7 @@ const TodayPage = async () => {
     );
 };
 
-export function EmptyLists() {
+function EmptyLists() {
     return (
         <div className="w-full mx-auto flex flex-col max-w-[300px] items-center justify-center ">
             <div className="w-[200px] h-[200px] relative">

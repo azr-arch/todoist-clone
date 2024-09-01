@@ -35,7 +35,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             where: {
                 id: taskId,
             },
-            data: data,
+            data: {
+                title: values.title,
+                description: values.description,
+                dueDate: values.dueDate ? new Date(values?.dueDate) : null,
+                sectionType: values.sectionType,
+                priority: values.priority as Priority,
+            },
         });
 
         // Will add audit logs here for actions like update, delete or create!

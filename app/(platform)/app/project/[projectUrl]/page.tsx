@@ -4,6 +4,7 @@ import Image from "next/image";
 import { TaskList } from "../../_components/tasklist";
 import { AddSectionBtn } from "../../inbox/_components/add-section-btn";
 import { SectionContainer } from "../../inbox/_components/section-container";
+import { EmptyTasks } from "@/components/empty-tasks";
 
 const ProjectUrlPage = async ({ params }: { params: { projectUrl: string } }) => {
     const [projectName, projectId] = params.projectUrl.split("_");
@@ -78,20 +79,3 @@ const ProjectUrlPage = async ({ params }: { params: { projectUrl: string } }) =>
 };
 
 export default ProjectUrlPage;
-
-export function EmptyTasks() {
-    return (
-        <div className="w-full mx-auto flex flex-col max-w-[300px] items-center justify-center ">
-            <div className="w-[200px] h-[200px] relative">
-                <Image src={"/assets/bag.png"} fill alt="bag" />
-            </div>
-
-            <div className="space-y-2 text-center">
-                <h4 className="font-medium leading-none">Start small (or dream big)...</h4>
-                <p className="text-sm text-neutral-300 ">
-                    Add your tasks or find a template to get started with your project.
-                </p>
-            </div>
-        </div>
-    );
-}

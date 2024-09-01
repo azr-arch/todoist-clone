@@ -36,6 +36,8 @@ model Task {
 
   projectId     String? @db.Uuid
   project       Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  notificationSent   Boolean @default(false)
  
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
