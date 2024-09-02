@@ -43,7 +43,7 @@ function TaskInput({ defaultValue = "", name = "taskInput" }) {
                     span.className = "bg-red-500";
                 }
 
-                inputRef.current.appendChild(span);
+                inputRef.current?.appendChild(span);
             });
 
             // inputValue.split(" ").map((word) => {

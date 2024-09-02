@@ -14,7 +14,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { AlertModal } from "@/components/modals/alert-modal";
 import { CustomCalendar } from "@/components/custom-calendar";
-import TaskInput from "@/components/task-input";
 import { PrioritySelect } from "@/components/form/priority-select";
 import { Priority } from "@prisma/client";
 

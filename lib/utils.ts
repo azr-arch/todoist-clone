@@ -33,7 +33,7 @@ export function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 }
 
 export const generateHeading = (date: Date) => {
-    const options = { day: "numeric", month: "short", weekday: "long" };
+    const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "short", weekday: "long" };
     const formattedDate = date.toLocaleDateString("en-US", options).split(", ");
 
     const day = formattedDate[1].split(" ")[0];
