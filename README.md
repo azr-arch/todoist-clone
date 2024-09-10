@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TodoVex - Todoist Clone
 
-## Getting Started
+TodoVex is a clone of the Todoist app, aiming to replicate most of its features. This project is currently in development and built using modern web technologies.
 
-First, run the development server:
+## Technologies Used
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Next.js**
+- **TypeScript**
+- **PostgreSQL**
+- **Prisma**
+- **ShadCN**
+- **TailwindCSS**
+- **Clerk**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Currently Implemented
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Task Creation**: Create tasks with due dates and priorities.
+- **Task Update**: Edit task details.
+- **Task Copy**: Duplicate tasks.
+- **Task Delete**: Remove tasks.
+- **Filter and Label Creation**: Organize tasks with filters and labels.
+- **Project CRUD**: Create, read, update, and delete projects.
 
-## Learn More
+## Installation
 
-To learn more about Next.js, take a look at the following resources:
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/yourusername/todovex.git
+    cd todovex
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Install dependencies:
+    ```bash
+    npm install
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+3. Set up environment variables:
+    - Copy the `.env.example` file to `.env.local` and fill in the required values.
 
-## Deploy on Vercel
+4. Run the development server:
+    ```bash
+    npm run dev
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Feel free to fork the repository and submit pull requests. Any contributions are welcome!
+
+## Reporting Bugs
+
+If you encounter any bugs, please report them by opening an issue on GitHub.
+
+## Disclaimer
+
+This project is for educational purposes only. It is not intended for commercial use and is not affiliated with or endorsed by Todoist.
