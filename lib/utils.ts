@@ -57,3 +57,14 @@ export const createFormattedNameAndUrl = (name: string, id: string) => {
 };
 
 //
+
+export const getStartAndEndOfDay = () => {
+    const today = new Date();
+    const startOfDay = new Date(today);
+    startOfDay.setHours(0, 0, 0, 0); // Set time to midnight
+
+    const endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999); // Set time to just before midnight
+
+    return { startOfDay, endOfDay };
+};

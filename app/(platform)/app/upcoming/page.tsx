@@ -1,26 +1,10 @@
 import { prismaDb } from "@/lib/db";
 import { UpcomingList } from "./_components/upcoming-list";
+import { fetchTasks } from "@/lib/task-fetcher";
 
 const UpcomingPage = async () => {
-    const upcomingTasks = await prismaDb.task.findMany({
-        where: {
-            isCompleted: {
-                not: true,
-            },
-            dueDate: {
-                gte: new Date(),
-            },
-        },
-        orderBy: {
-            order: "asc",
-        },
-        include: {
-            labels: {
-                select: {
-                    label: true,
-                },
-            },
-        },
+    const { tasks: upcomingTasks } = await fetchTasks({
+        startDate: new Date(),
     });
 
     // Todo add overdueList here and add drag and drop

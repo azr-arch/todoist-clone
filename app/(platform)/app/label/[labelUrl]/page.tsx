@@ -4,6 +4,7 @@ import { LabelWithLists } from "@/lib/types";
 import { Label } from "@prisma/client";
 import { TaskItem } from "../../_components/task-item";
 import { TaskList } from "../../_components/tasklist";
+import { currentUser } from "@clerk/nextjs/server";
 
 const LabelUrlPage = async ({ params }: { params: { labelUrl: string } }) => {
     const [labelName, labelId] = params.labelUrl.split("_");
@@ -12,10 +13,12 @@ const LabelUrlPage = async ({ params }: { params: { labelUrl: string } }) => {
     let label;
 
     try {
+        const user = await currentUser();
         // TODO: Optimize this query
         label = await prismaDb.label.findUnique({
             where: {
                 id: labelId,
+                clerkUserId: user?.id,
             },
             include: {
                 tasks: {

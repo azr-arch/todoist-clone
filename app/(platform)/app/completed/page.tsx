@@ -1,4 +1,5 @@
 import { prismaDb } from "@/lib/db";
+import { currentUser } from "@clerk/nextjs/server";
 import { AuditLog } from "@prisma/client";
 import { Check } from "lucide-react";
 import Image from "next/image";
@@ -14,8 +15,10 @@ const CompletedPage = async () => {
     //         order: "asc",
     //     },
     // });
+    const user = await currentUser();
     const logs = await prismaDb.auditLog.findMany({
         where: {
+            clerkUserId: user?.id,
             action: {
                 equals: "COMPLETE",
             },

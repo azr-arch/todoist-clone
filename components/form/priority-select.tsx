@@ -47,8 +47,13 @@ export const PrioritySelect = forwardRef<HTMLInputElement, PrioritySelectProps>(
                     <SelectContent>
                         {PRIORITY.map((item) => (
                             <SelectItem key={item.value} value={item.value} className="">
-                                <div className="flex items-center w-full gap-x-4 ">
-                                    <Flag className={cn(item.className, "size-4 stroke-1")} />
+                                <div className="flex items-center w-full gap-x-2 ">
+                                    <Flag
+                                        className={cn(
+                                            item.className,
+                                            "size-4 stroke-1 text-neutral-500"
+                                        )}
+                                    />
                                     <span className="text-sm font-thin text-neutral-600">
                                         {item.label}
                                     </span>

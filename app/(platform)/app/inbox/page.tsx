@@ -6,35 +6,21 @@ import { TaskItem } from "../_components/task-item";
 import { AddSectionBtn } from "./_components/add-section-btn";
 import { SectionContainer } from "./_components/section-container";
 import Image from "next/image";
+import { fetchTasks } from "@/lib/task-fetcher";
+import { currentUser } from "@clerk/nextjs/server";
 
 const InboxPage = async () => {
-    const tasks = await prismaDb.task.findMany({
-        where: {
-            isCompleted: {
-                not: true,
-            },
-            sectionId: {
-                equals: null,
-            },
-            projectId: {
-                equals: null,
-            },
-        },
-        orderBy: {
-            order: "asc",
-        },
-        include: {
-            labels: {
-                select: {
-                    label: true,
-                },
-            },
-        },
+    const user = await currentUser();
+
+    const { tasks, overdueTasks } = await fetchTasks({
+        sectionId: undefined,
+        projectId: undefined,
     });
 
     const sections = await prismaDb.section.findMany({
         where: {
             projectId: null,
+            clerkUserId: user?.id,
         },
         include: {
             tasks: true,

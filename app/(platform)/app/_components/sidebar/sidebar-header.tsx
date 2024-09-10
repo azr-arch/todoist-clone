@@ -11,8 +11,20 @@ import {
 import { cn } from "@/lib/utils";
 import { SignOutButton, useUser } from "@clerk/nextjs";
 import { MenubarContent } from "@radix-ui/react-menubar";
-import { Activity, ChevronDown, LogOut, Plus, Settings } from "lucide-react";
+import {
+    Activity,
+    ChevronDown,
+    LogOut,
+    Plus,
+    Settings,
+    Bell,
+    PanelRight,
+    PanelLeft,
+} from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
+import { SidebarToggle } from "./sidebar-toggle";
+import { useSidebar } from "@/hooks/use-sidebar";
 
 const iconStyles = "w-4 h-4 ";
 
@@ -38,9 +50,10 @@ const menuItems = [
 
 export const SidebarHeader = () => {
     const { user } = useUser();
+    const { isOpen } = useSidebar();
 
     return (
-        <div className="px-2 py-3">
+        <div className="px-2 py-3 flex items-center w-full">
             {user && (
                 <Menubar>
                     <MenubarMenu>
@@ -96,6 +109,18 @@ export const SidebarHeader = () => {
                     </MenubarMenu>
                 </Menubar>
             )}
+
+            <div
+                className={cn(
+                    `ml-auto space-x-1.5 transition-transform duration-200 ease-in-out`,
+                    isOpen ? "translate-x-0" : "translate-x-14"
+                )}
+            >
+                <Button size={"icon"} variant={"ghost"}>
+                    <Bell className="size-5 text-neutral-600 stroke-1 " />
+                </Button>
+                <SidebarToggle />
+            </div>
         </div>
     );
 };

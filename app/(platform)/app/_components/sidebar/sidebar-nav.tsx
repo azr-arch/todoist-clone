@@ -2,6 +2,7 @@
 
 import { AddProjectModal } from "@/components/modals/add-project-modal";
 import { Button } from "@/components/ui/button";
+import { useSidebarAddTaskModal } from "@/hooks/use-sidebar-add-task-modal";
 import { cn, createFormattedNameAndUrl } from "@/lib/utils";
 import { Project } from "@prisma/client";
 import {
@@ -26,6 +27,7 @@ export const SidebarNav = ({ projects }: { projects: Project[] }) => {
     const [modalOpen, setModalOpen] = useState(false);
 
     const pathname = usePathname();
+    const { onOpen } = useSidebarAddTaskModal();
 
     const sidebarRoutes = [
         {
@@ -66,9 +68,15 @@ export const SidebarNav = ({ projects }: { projects: Project[] }) => {
 
             <nav className="">
                 <ul className="px-2 py-2">
-                    <li className="flex items-center gap-x-2 px-2 py-1.5 mb-2 rounded-sm transition hover:bg-neutral-100 duration-150 cursor-pointer">
-                        <PlusCircle className="w-6 h-6 text-highlight" />
-                        <p className="text-orange-700">Add task</p>
+                    <li className="">
+                        <Button
+                            className="w-full flex items-center justify-start gap-x-2 px-2 py-1.5 mb-2 rounded-sm transition hover:bg-neutral-100/50 duration-150 cursor-pointer"
+                            variant={"ghost"}
+                            onClick={onOpen}
+                        >
+                            <PlusCircle className="w-6 h-6 text-highlight" />
+                            <p className="text-orange-700">Add task</p>
+                        </Button>
                     </li>
                     {sidebarRoutes.map((item, idx) => (
                         <li

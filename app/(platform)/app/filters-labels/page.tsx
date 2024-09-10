@@ -3,12 +3,17 @@ import { CollapsibleList } from "./_components/collapsible-list";
 import { FilterList } from "./_components/filter-list";
 import { LabelList } from "./_components/label-list";
 import { Filter, Label } from "@prisma/client";
+import { currentUser } from "@clerk/nextjs/server";
 
 const FiltersAndLabelsPage = async () => {
     let labels: Label[];
     let filters: Filter[];
     try {
+        const user = await currentUser();
         labels = await prismaDb.label.findMany({
+            where: {
+                clerkUserId: user?.id,
+            },
             orderBy: {
                 order: "asc",
             },
@@ -18,6 +23,9 @@ const FiltersAndLabelsPage = async () => {
         });
 
         filters = await prismaDb.filter.findMany({
+            where: {
+                clerkUserId: user?.id,
+            },
             orderBy: {
                 order: "asc",
             },

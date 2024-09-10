@@ -4,70 +4,16 @@ import { prismaDb } from "@/lib/db";
 import { OverdueList } from "../_components/overdue-list";
 import Image from "next/image";
 import { CheckCircle } from "lucide-react";
-
-const getStartAndEndOfDay = () => {
-    const today = new Date();
-    const startOfDay = new Date(today);
-    startOfDay.setHours(0, 0, 0, 0); // Set time to midnight
-
-    const endOfDay = new Date(today);
-    endOfDay.setHours(23, 59, 59, 999); // Set time to just before midnight
-
-    return { startOfDay, endOfDay };
-};
-
-const fetchTasks = async (startOfDay: Date, endOfDay: Date) => {
-    try {
-        const [tasks, overdueTasks] = await Promise.all([
-            prismaDb.task.findMany({
-                where: {
-                    isCompleted: {
-                        not: true,
-                    },
-                    dueDate: {
-                        gte: startOfDay,
-                        lte: endOfDay,
-                    },
-                },
-                orderBy: {
-                    order: "asc",
-                },
-                include: {
-                    labels: {
-                        select: {
-                            label: true,
-                        },
-                    },
-                },
-            }),
-            prismaDb.task.findMany({
-                where: {
-                    dueDate: {
-                        lt: startOfDay,
-                    },
-                },
-                orderBy: {
-                    order: "asc",
-                },
-                include: {
-                    labels: {
-                        select: {
-                            label: true,
-                        },
-                    },
-                },
-            }),
-        ]);
-
-        return { tasks, overdueTasks };
-    } catch (error) {
-        return { tasks: [], overdueTasks: [] };
-    }
-};
+import { getStartAndEndOfDay } from "@/lib/utils";
+import { fetchTasks } from "@/lib/task-fetcher";
 
 const TodayPage = async () => {
     const { startOfDay, endOfDay } = getStartAndEndOfDay();
-    const { tasks, overdueTasks } = await fetchTasks(startOfDay, endOfDay);
+    const { tasks, overdueTasks } = await fetchTasks({
+        startDate: startOfDay,
+        endDate: endOfDay,
+        includeOverdue: true,
+    });
 
     return (
         <div className="h-full">

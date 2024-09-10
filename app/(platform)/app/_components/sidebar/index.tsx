@@ -17,7 +17,11 @@ export const Sidebar = async () => {
     }
 
     return (
-        <aside className="w-[280px] h-screen bg-sidebar fixed top-0 left-0 z-50 group">
+        <aside
+            id="sidebar"
+            data-state={"true"}
+            className="w-[280px] transition-transform duration-200 ease-in-out data-[state=false]:-translate-x-[100%] data-[state=true]:-translate-x-0 h-screen bg-sidebar fixed top-0 left-0 z-50 group"
+        >
             {/* Header */}
             <SidebarHeader />
 

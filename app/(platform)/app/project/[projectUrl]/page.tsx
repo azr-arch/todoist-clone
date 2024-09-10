@@ -5,6 +5,7 @@ import { TaskList } from "../../_components/tasklist";
 import { AddSectionBtn } from "../../inbox/_components/add-section-btn";
 import { SectionContainer } from "../../inbox/_components/section-container";
 import { EmptyTasks } from "@/components/empty-tasks";
+import { currentUser } from "@clerk/nextjs/server";
 
 const ProjectUrlPage = async ({ params }: { params: { projectUrl: string } }) => {
     const [projectName, projectId] = params.projectUrl.split("_");
@@ -14,9 +15,12 @@ const ProjectUrlPage = async ({ params }: { params: { projectUrl: string } }) =>
     let sections;
 
     try {
+        const user = await currentUser();
+
         project = await prismaDb.project.findUnique({
             where: {
                 id: projectId,
+                clerkUserId: user?.id,
             },
             include: {
                 sections: true,
@@ -32,6 +36,7 @@ const ProjectUrlPage = async ({ params }: { params: { projectUrl: string } }) =>
         sections = await prismaDb.section.findMany({
             where: {
                 projectId,
+                clerkUserId: user?.id,
             },
             include: {
                 tasks: true,

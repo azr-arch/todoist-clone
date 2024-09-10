@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { TaskModal } from "../modals/task-modal";
+import { SidebarAddTaskModal } from "../modals/sidebar-add-task-modal";
 
 export const ModalProvider = () => {
     const [isMounted, setIsMounted] = useState(false);
@@ -15,6 +16,7 @@ export const ModalProvider = () => {
     return (
         <>
             <TaskModal />
+            <SidebarAddTaskModal />
         </>
     );
 };

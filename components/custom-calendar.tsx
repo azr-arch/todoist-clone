@@ -101,14 +101,14 @@ export function CustomCalendar({
                     <Button
                         variant="outline"
                         className={cn(
-                            "justify-start text-left font-thin",
+                            "justify-start text-left font-thin text-sm",
                             !date && "text-muted-foreground",
                             open && "bg-neutral-100",
                             btnClassName
                         )}
                     >
                         <CalendarIcon className="mr-2 h-4 w-4 stroke-1" />
-                        {date ? formatDate(date) : <span className="text-sm f">Due date</span>}
+                        {date ? formatDate(date) : <span className="text-inherit">Due date</span>}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className={cn(` p-0 `, className)} align={align} side={side}>
