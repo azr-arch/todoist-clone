@@ -12,18 +12,6 @@ export const PathBasedButtons = () => {
 
     // TODO: implement this
     // Related to notifications and task reminders
-    // Registering service worker
-    // useEffect(() => {
-    //     async function setUpServiceWorker() {
-    //         try {
-    //             await registerServiceWorker();
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     }
-
-    //     setUpServiceWorker();
-    // }, []);
 
     return (
         <div className="min-h-[55px] px-3 w-full flex items-center justify-between">

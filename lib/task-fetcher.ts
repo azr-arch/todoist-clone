@@ -1,5 +1,3 @@
-// utils/taskFetcher.ts
-
 import { currentUser } from "@clerk/nextjs/server";
 import { prismaDb } from "./db";
 import { Task } from "@prisma/client";

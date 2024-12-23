@@ -6,12 +6,15 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export const formatDate = (date: Date): string => {
+export const formatDate = (date: Date, forUpcoming = false): string => {
     const today = new Date();
     const tomorrow = addDays(today, 1);
     const endOfWeek = addDays(today, 6); // End of the week is 7 days from today
 
-    if (date >= today && date <= endOfWeek) {
+    if (forUpcoming) {
+        // Format for upcoming view: "Month Name Year" (e.g., "December 2024")
+        return format(date, "MMMM yyyy");
+    } else if (date >= today && date <= endOfWeek) {
         if (date.toDateString() === today.toDateString()) {
             return "Today";
         } else if (date.toDateString() === tomorrow.toDateString()) {
@@ -67,4 +70,31 @@ export const getStartAndEndOfDay = () => {
     endOfDay.setHours(23, 59, 59, 999); // Set time to just before midnight
 
     return { startOfDay, endOfDay };
+};
+
+export const generateInitialDates = (days = 30) => {
+    const dates = [];
+    const today = new Date();
+
+    for (let i = 0; i < days; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        dates.push(date.toISOString().split("T")[0]); // Format as YYYY-MM-DD
+    }
+
+    return dates;
+};
+
+export const generateMoreDates = (page: number, daysPerPage = 30) => {
+    const dates = [];
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() + page * daysPerPage);
+
+    for (let i = 0; i < daysPerPage; i++) {
+        const date = new Date(startDate);
+        date.setDate(startDate.getDate() + i);
+        dates.push(date.toISOString().split("T")[0]); // Format as YYYY-MM-DD
+    }
+
+    return dates;
 };

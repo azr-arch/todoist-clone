@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useRef, useEffect } from "react";
 import { format, addDays, startOfWeek, endOfWeek, addWeeks } from "date-fns";
 import { CalendarClockIcon, Calendar as CalendarIcon, CircleOff, Sofa, Sun, X } from "lucide-react";
@@ -8,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 import { Task } from "@prisma/client";
 import { Input } from "./ui/input";
+import { usePathname } from "next/navigation";
 
 interface CustomCalendarProps {
     tasks?: Task[];
@@ -16,6 +19,8 @@ interface CustomCalendarProps {
     btnClassName?: string;
     align?: "end" | "center" | "start";
     side?: "right" | "top" | "bottom" | "left";
+    showMenu?: Boolean;
+    clearnBtnEnabled?: Boolean;
 }
 
 const menuItems = [
@@ -48,6 +53,8 @@ export function CustomCalendar({
     btnClassName,
     align = "center",
     side = "right",
+    showMenu = true,
+    clearnBtnEnabled = true,
 }: CustomCalendarProps) {
     const [date, setDate] = useState<Date | undefined>(() => {
         if (defaultValue && defaultValue instanceof Date) {
@@ -61,6 +68,7 @@ export function CustomCalendar({
 
     const [stringDate, setStringDate] = React.useState<string>("");
     const dateRef = useRef<null | HTMLInputElement>(null);
+    const pathname = usePathname();
 
     const handleClear = () => {
         setDate(undefined);
@@ -108,54 +116,62 @@ export function CustomCalendar({
                         )}
                     >
                         <CalendarIcon className="mr-2 h-4 w-4 stroke-1" />
-                        {date ? formatDate(date) : <span className="text-inherit">Due date</span>}
+                        {date ? (
+                            formatDate(date, pathname.includes("upcoming"))
+                        ) : (
+                            <span className="text-inherit">Due date</span>
+                        )}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className={cn(` p-0 `, className)} align={align} side={side}>
-                    <div className="relative">
-                        <Input
-                            type="string"
-                            placeholder="MM DD YYYY"
-                            className="rounded-sm"
-                            value={stringDate}
-                            onChange={(e) => {
-                                setStringDate(e.target.value);
-                                const parsedDate = new Date(e.target.value);
-                                if (parsedDate.toString() === "Invalid Date") {
-                                    setDate(undefined);
-                                } else {
-                                    setDate(parsedDate);
-                                }
-                            }}
-                        />
+                    {showMenu && (
+                        <>
+                            <div className="relative">
+                                <Input
+                                    type="string"
+                                    placeholder="MM DD YYYY"
+                                    className="rounded-sm placeholder:text-neutral-400"
+                                    value={stringDate}
+                                    onChange={(e) => {
+                                        setStringDate(e.target.value);
+                                        const parsedDate = new Date(e.target.value);
+                                        if (parsedDate.toString() === "Invalid Date") {
+                                            setDate(undefined);
+                                        } else {
+                                            setDate(parsedDate);
+                                        }
+                                    }}
+                                />
 
-                        {/* Clear search date  */}
-                        {stringDate && (
-                            <Button
-                                size={"xs"}
-                                variant={"ghost"}
-                                className="px-1 rounded-sm absolute right-2 top-1/2 -translate-y-1/2"
-                                onClick={() => setStringDate("")}
-                            >
-                                <X className=" w-3 h-3 " />
-                            </Button>
-                        )}
-                    </div>
-                    <ol className="w-full py-1 flex flex-col items-start">
-                        {menuItems.map((item) => (
-                            <li key={item.label} className="w-full">
-                                <Button
-                                    type="button"
-                                    className="w-full flex items-center justify-start font-thin px-2"
-                                    variant={"ghost"}
-                                    onClick={() => setDate(item.value)}
-                                >
-                                    {item.icon}
-                                    {item.label}
-                                </Button>
-                            </li>
-                        ))}
-                    </ol>
+                                {/* Clear search date  */}
+                                {stringDate && (
+                                    <Button
+                                        size={"xs"}
+                                        variant={"ghost"}
+                                        className="px-1 rounded-sm absolute right-2 top-1/2 -translate-y-1/2"
+                                        onClick={() => setStringDate("")}
+                                    >
+                                        <X className=" w-3 h-3 " />
+                                    </Button>
+                                )}
+                            </div>
+                            <ol className="w-full py-1 flex flex-col items-start">
+                                {menuItems.map((item) => (
+                                    <li key={item.label} className="w-full">
+                                        <Button
+                                            type="button"
+                                            className="w-full flex items-center justify-start font-thin px-2"
+                                            variant={"ghost"}
+                                            onClick={() => setDate(item.value)}
+                                        >
+                                            {item.icon}
+                                            {item.label}
+                                        </Button>
+                                    </li>
+                                ))}
+                            </ol>
+                        </>
+                    )}
                     <Calendar
                         mode="single"
                         selected={date}
@@ -185,7 +201,7 @@ export function CustomCalendar({
                         //     ),
                         // }}
                     />
-                    {date && (
+                    {date && clearnBtnEnabled && (
                         <Button
                             variant="outline"
                             onClick={handleClear}
