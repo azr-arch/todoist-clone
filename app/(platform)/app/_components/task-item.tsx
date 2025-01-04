@@ -66,8 +66,10 @@ export const TaskItem = ({
         }
     };
 
-    const onComplete = async () => {
+    const onComplete = async (e: React.MouseEvent<HTMLButtonElement>) => {
         setLoading(true);
+        e.stopPropagation(); // Prevent the click from trigger view task modal
+
         try {
             await axios.patch(`/api/tasks/${data.id}`);
             router.refresh();
@@ -143,10 +145,10 @@ export const TaskItem = ({
                                 <ArrowUpDown className="w-4 h-4 " />
                             </div>
 
-                            {/* Checkbox to comeplete task */}
+                            {/* Checkbox to complete task */}
                             <button
                                 disabled={loading}
-                                onClick={onComplete}
+                                onClick={(e) => onComplete(e)}
                                 className={cn(
                                     `disabled:opacity-50 disabled:cursor-not-allowed rounded-full size-4 self-center
                                      border cursor-pointer   flex items-center justify-center`,
