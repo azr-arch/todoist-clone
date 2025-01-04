@@ -171,7 +171,7 @@ export const TaskItem = ({
                             {/* Actions */}
                             <DropdownMenu>
                                 <DropdownMenuTrigger className="ml-auto">
-                                    <Button variant={"ghost"} size="icon">
+                                    <Button asChild variant={"ghost"} size="icon">
                                         <MoreHorizontal className="size-5" />
                                     </Button>
                                 </DropdownMenuTrigger>
