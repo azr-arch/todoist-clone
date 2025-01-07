@@ -67,21 +67,25 @@ export const PRIORITY = [
     {
         label: "Priority 1",
         value: Priority.p1,
-        className: "size-3 text-red-500 fill-red-500",
+        className: "size-3 text-red-500 ",
+        fillColor: "red-500",
     },
     {
         label: "Priority 2",
         value: Priority.p2,
-        className: "size-3 text-yellow-500 fill-yellow-500",
+        className: "size-3 text-yellow-500 ",
+        fillColor: "yellow-500",
     },
     {
         label: "Priority 3",
         value: Priority.p3,
-        className: "size-3 text-blue-400 fill-blue-400",
+        className: "size-3 text-blue-400 ",
+        fillColor: "blue-500",
     },
     {
         label: "Priority 4",
         value: Priority.p4,
         className: "size-3 text-black ",
+        fillColor: "white",
     },
 ];

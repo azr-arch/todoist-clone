@@ -86,7 +86,7 @@ export const FilterItem = ({ data }: FilterItemProps) => {
 
                         <DropdownMenu>
                             <DropdownMenuTrigger className="ml-auto">
-                                <Button variant={"ghost"} size={"icon"}>
+                                <Button variant={"ghost"} size={"icon"} asChild>
                                     <MoreHorizontal className="w-5 h-5" />
                                 </Button>
                             </DropdownMenuTrigger>
@@ -112,6 +112,7 @@ export const FilterItem = ({ data }: FilterItemProps) => {
                                         }}
                                         variant={"ghost"}
                                         className="font-thin h-fit w-full flex items-center justify-start p-0"
+                                        // asChild
                                     >
                                         <Edit className="w-5 h-5 mr-4" />
                                         Edit

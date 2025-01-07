@@ -25,12 +25,12 @@ export const PrioritySelect = forwardRef<HTMLInputElement, PrioritySelectProps>(
         const { pending } = useFormStatus();
 
         return (
-            <div className="w-full">
-                <div className="space-y-1 w-full">
+            <div className="w-full  rounded-sm">
+                <div className="space-y-1 w-full  group">
                     {label ? (
                         <Label
                             htmlFor={"priority"}
-                            className="text-xs font-semibold text-neutral-700"
+                            className="text-xs font-semibold text-neutral-700 "
                         >
                             {label}
                         </Label>
@@ -41,20 +41,20 @@ export const PrioritySelect = forwardRef<HTMLInputElement, PrioritySelectProps>(
                     defaultValue={defaultValue || Priority.p4}
                     name="priority"
                 >
-                    <SelectTrigger className={cn("", btnClassName)}>
-                        <SelectValue className="" defaultValue={Priority.p4} />
+                    <SelectTrigger className={cn("hover:bg-black/10 focus:ring-0", btnClassName)}>
+                        <SelectValue defaultValue={Priority.p4} />
                     </SelectTrigger>
                     <SelectContent>
                         {PRIORITY.map((item) => (
-                            <SelectItem key={item.value} value={item.value} className="">
+                            <SelectItem key={item.value} value={item.value}>
                                 <div className="flex items-center w-full gap-x-2 ">
                                     <Flag
                                         className={cn(
                                             item.className,
-                                            "size-4 stroke-1 text-neutral-500"
+                                            `size-4 stroke-1 fill-${item.fillColor}`
                                         )}
                                     />
-                                    <span className="text-sm font-thin text-neutral-600">
+                                    <span className="text-sm font-thin  text-neutral-600">
                                         {item.label}
                                     </span>
                                 </div>

@@ -3,7 +3,7 @@ import { Sidebar } from "./_components/sidebar";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="w-full h-full flex items-center justify-end ">
+        <div className="w-full h-full flex items-center justify-end overflow-hidden">
             <Sidebar />
             <div
                 style={{ minWidth: "calc(100% - 280px)" }}
@@ -16,8 +16,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
                 <PathBasedButtons />
 
-                <div className="max-w-[850px]  mx-auto mt-3 w-full h-full self-stretch relative px-10 lg:px-8">
-                    {children}
+                <div className="min-w-[500px]   mx-auto mt-3 w-full h-full self-stretch relative px-10 lg:px-8">
+                    <div className="max-w-[850px] mx-auto">{children}</div>
                 </div>
             </div>
         </div>
