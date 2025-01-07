@@ -1,28 +1,6 @@
 import { Priority } from "@prisma/client";
-import { Flag } from "lucide-react";
 
-export const NavRoutes = [
-    {
-        href: "/features",
-        label: "Features",
-    },
-    {
-        href: "/teams",
-        label: "For Teams",
-    },
-    {
-        href: "/pricing",
-        label: "Pri",
-    },
-    {
-        href: "/features",
-        label: "Features",
-    },
-    {
-        href: "/features",
-        label: "Features",
-    },
-];
+export const ICON_STYLES = "w-4 h-4 ";
 
 export const COLORS = [
     {
@@ -68,19 +46,19 @@ export const PRIORITY = [
         label: "Priority 1",
         value: Priority.p1,
         className: "size-3 text-red-500 ",
-        fillColor: "red-500",
+        fillColor: "rgb(239 68 68)",
     },
     {
         label: "Priority 2",
         value: Priority.p2,
         className: "size-3 text-yellow-500 ",
-        fillColor: "yellow-500",
+        fillColor: "rgb(250 204 21)",
     },
     {
         label: "Priority 3",
         value: Priority.p3,
         className: "size-3 text-blue-400 ",
-        fillColor: "blue-500",
+        fillColor: "rgb(96 165 250)",
     },
     {
         label: "Priority 4",

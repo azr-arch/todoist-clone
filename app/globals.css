@@ -99,3 +99,28 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 }
+
+@media (max-width: 768px) {
+    /* Make it appear  */
+    #sidebar[data-state="true"]::after {
+        content: "";
+        position: absolute;
+        width: calc(100vw - 200px);
+        height: 100%;
+        top: 0;
+        left: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        z-index: 5000;
+        opacity: 1;
+        visibility: visible;
+        transform: all 200ms ease-in-out;
+        transition-duration: 500ms;
+    }
+
+    #sidebar[data-state="false"]::after {
+        content: "";
+        opacity: 0;
+        visibility: hidden;
+        z-index: -5000;
+    }
+}

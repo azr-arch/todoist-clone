@@ -3,13 +3,12 @@
 import { forwardRef } from "react";
 import { useFormStatus } from "react-dom";
 import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 
 import { cn } from "@/lib/utils";
-import { FormErrors } from "./form-errors";
 import { Select } from "@radix-ui/react-select";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { PRIORITY } from "@/lib/constants";
+
 import { Flag } from "lucide-react";
 import { Priority } from "@prisma/client";
 
@@ -25,7 +24,7 @@ export const PrioritySelect = forwardRef<HTMLInputElement, PrioritySelectProps>(
         const { pending } = useFormStatus();
 
         return (
-            <div className="w-full  rounded-sm">
+            <div className="w-max  rounded-sm">
                 <div className="space-y-1 w-full  group">
                     {label ? (
                         <Label
@@ -49,12 +48,10 @@ export const PrioritySelect = forwardRef<HTMLInputElement, PrioritySelectProps>(
                             <SelectItem key={item.value} value={item.value}>
                                 <div className="flex items-center w-full gap-x-2 ">
                                     <Flag
-                                        className={cn(
-                                            item.className,
-                                            `size-4 stroke-1 fill-${item.fillColor}`
-                                        )}
+                                        fill={item.fillColor}
+                                        className={cn(item.className, `size-4 stroke-1`)}
                                     />
-                                    <span className="text-sm font-thin  text-neutral-600">
+                                    <span className="text-sm font-thin  text-inherit">
                                         {item.label}
                                     </span>
                                 </div>

@@ -60,7 +60,13 @@ export async function fetchTasks({
         baseQuery.where.projectId = projectId;
     }
 
-    const tasks = await prismaDb.task.findMany(baseQuery);
+    let tasks: unknown[] = [];
+
+    try {
+        tasks = await prismaDb.task.findMany(baseQuery);
+    } catch (error) {
+        console.error("Something went wrong while fetching tasks!: ", error);
+    }
 
     let overdueTasks: Task[] = [];
     if (includeOverdue) {

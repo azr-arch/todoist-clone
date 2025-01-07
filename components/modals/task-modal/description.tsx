@@ -30,14 +30,14 @@ export const Description = ({ data }: DescriptionProps) => {
 
             <div
                 className=" text-[#202020] space-y-2
-                hidden md:block absolute z-40 right-0 top-[48px] md:h-[calc(100%-48px)] w-[260px] bg-[#fcfaf8] px-4 py-3
+                hidden md:block absolute z-40 right-0 top-[48px] md:h-[calc(100%-48px)] w-[260px] bg-blue-100 px-4 py-3
                 "
             >
                 {/* Separate them into components */}
                 <div className="border-b border-neutral-200/50 py-2">
-                    <span className="font-thin px-2.5 text-xs text-neutral-500">Project</span>
+                    <span className="font-thin px-2.5 text-xs text-neutral-600">Project</span>
                     <Button
-                        className="w-full hover:bg-[#ffaaa1]/20 text-[#202020] text-start justify-start px-3 font-thin"
+                        className="w-full hover:bg-blue-300 text-[#202020] text-start justify-start px-3 font-thin"
                         variant={"ghost"}
                     >
                         <Inbox className="size-4  mr-4 stroke-1" />
@@ -50,7 +50,7 @@ upon debuggin the logs tells that, the state open is being rendered as true, but
                 <div className="border-b border-neutral-200/50 pb-2">
                     <CustomCalendar
                         className="w-full"
-                        btnClassName="outline-0 bg-transparent hover:bg-[#ffaaa1]/20 border-0  w-full shadow-none px-3 gap-x-2 text-[#202020]"
+                        btnClassName="outline-0 bg-transparent hover:bg-blue-300 border-0  w-full shadow-none px-3 gap-x-2 text-[#202020]"
                         side="bottom"
                         align="center"
                         defaultValue={data?.dueDate ? new Date(data.dueDate) : undefined}
@@ -58,10 +58,10 @@ upon debuggin the logs tells that, the state open is being rendered as true, but
                 </div>
 
                 <div className="border-b border-neutral-200/50 py-2">
-                    <span className="font-thin px-2.5 text-xs text-neutral-500">Priority</span>
+                    <span className="font-thin px-2.5 text-xs text-neutral-600">Priority</span>
                     <PrioritySelect
                         className="w-full "
-                        btnClassName="border-0  shadow-none hover:bg-neutral-100 gap-x-2 transition-colors text-lg"
+                        btnClassName="border-0  shadow-none hover:bg-blue-300 gap-x-2 transition-colors text-lg text-[#202020]"
                         defaultValue={data?.priority as Priority}
                     />
                 </div>

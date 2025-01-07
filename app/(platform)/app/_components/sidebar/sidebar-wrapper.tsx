@@ -24,6 +24,9 @@ export const SidebarWrapper = ({ projects }: SidebarWrapperProps) => {
 
         window.addEventListener("resize", handleResize);
 
+        // Call initially to set the correct state on load
+        handleResize();
+
         return () => {
             window.removeEventListener("resize", handleResize);
         };

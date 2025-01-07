@@ -122,7 +122,7 @@ export const AddTaskForm = ({ onCloseForm, sectionId, labelId }: AddTaskFormProp
                         <FormInput id="title" ref={inputRef} placeholder="Task name" type="text" />
 
                         <AutosizeTextArea />
-                        <div className="mt-3 flex items-center gap-2">
+                        <div className="mt-3 flex items-center gap-2 flex-wrap ">
                             <CustomCalendar
                                 defaultValue={pathname === "/app/today" ? new Date() : undefined}
                             />
