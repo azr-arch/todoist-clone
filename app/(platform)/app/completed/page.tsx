@@ -4,17 +4,7 @@ import { AuditLog } from "@prisma/client";
 import { Check } from "lucide-react";
 import Image from "next/image";
 
-const CompletedPage = async () => {
-    // const upcomingTasks = await prismaDb.task.findMany({
-    //     where: {
-    //         isCompleted: {
-    //             equals: true,
-    //         },
-    //     },
-    //     orderBy: {
-    //         order: "asc",
-    //     },
-    // });
+export default async function CompletedPage() {
     const user = await currentUser();
     const logs = await prismaDb.auditLog.findMany({
         where: {
@@ -30,14 +20,10 @@ const CompletedPage = async () => {
 
     return (
         <div>
-            {/* Loop over tasks, and differentiately render them according to dates */}
-            {/* <UpcomingList data={upcomingTasks} /> */}
             <List data={logs} />
         </div>
     );
-};
-
-export default CompletedPage;
+}
 
 function List({ data }: { data: AuditLog[] }) {
     // Create an object to store grouped tasks

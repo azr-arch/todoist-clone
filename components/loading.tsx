@@ -1,7 +1,7 @@
 import { LoaderCircleIcon } from "lucide-react";
 import Image from "next/image";
 
-export const LoadingUI = ({ withLogo = true }: { withLogo: boolean }) => {
+export const LoadingUI = ({ withLogo = true }: { withLogo?: boolean }) => {
     return (
         <div className="w-full h-full  flex items-center justify-center">
             <div className="space-y-2 flex flex-col items-center justify-center">
