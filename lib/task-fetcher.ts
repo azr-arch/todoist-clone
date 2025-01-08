@@ -60,7 +60,7 @@ export async function fetchTasks({
         baseQuery.where.projectId = projectId;
     }
 
-    let tasks: unknown[] = [];
+    let tasks: Task[] = [];
 
     try {
         tasks = await prismaDb.task.findMany(baseQuery);
