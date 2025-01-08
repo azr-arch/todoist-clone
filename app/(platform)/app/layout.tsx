@@ -16,7 +16,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
                 <PathBasedButtons />
 
-                <div className="sm:min-w-[300px] md:min-w-[500px]   mx-auto mt-3 w-full h-full self-stretch relative px-10 lg:px-8">
+                <div className="sm:min-w-[300px]  md:min-w-[500px] overflow-y-scroll  mx-auto mt-3 w-full h-full self-stretch relative px-10 lg:px-8">
                     <div className="max-w-[850px] mx-auto">{children}</div>
                 </div>
             </div>

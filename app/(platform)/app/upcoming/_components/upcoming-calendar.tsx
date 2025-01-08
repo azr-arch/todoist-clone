@@ -1,19 +1,24 @@
-import { CustomCalendar } from "@/components/custom-calendar";
+"use client";
 
+import { CustomCalendar } from "@/components/custom-calendar";
+import { CalendarWeekNav } from "./calendar-week-nav";
+import { useCalendar } from "@/hooks/use-calendar";
+
+// DO THIs
 export const UpcomingCalendar = () => {
-    // complete this!
+    const { currentWeek } = useCalendar();
+
     return (
-        <div>
+        <div className="flex items-center">
             <CustomCalendar
-                defaultValue={new Date()}
+                defaultValue={currentWeek}
                 showMenu={false}
                 side="bottom"
                 className="w-fit"
                 btnClassName="border-0 shadow-none h-fit py-1 px-1.5"
                 clearnBtnEnabled={false}
             />
-
-            {/* <CalendarWeeks /> */}
+            <CalendarWeekNav />
         </div>
     );
 };

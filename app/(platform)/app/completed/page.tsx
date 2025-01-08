@@ -19,7 +19,10 @@ export default async function CompletedPage() {
     });
 
     return (
-        <div>
+        <div className="px-4">
+            <span className="text-xs text-neutral-400">
+                This page has UI issues (working on it), use it on desktop
+            </span>
             <List data={logs} />
         </div>
     );
@@ -45,7 +48,7 @@ function List({ data }: { data: AuditLog[] }) {
     }
 
     return (
-        <div className="w-full  ">
+        <div className=" w-full ">
             {!groupedTasks && <p>Nothings here</p>}
 
             {Object.entries(groupedTasks).map(([date, logs]) => {
@@ -58,36 +61,36 @@ function List({ data }: { data: AuditLog[] }) {
                 });
 
                 return (
-                    <div key={date} className="w-full mb-4">
+                    <div key={date} className="mb-4  flex flex-col items-start">
                         <h2 className=" w-full  text-black inline-flex items-center border-b border-b-muted">
                             {formattedDate}
                             <span className="mx-4 w-1.5 h-1.5 rounded-full bg-neutral-300" />
                             {dayOfWeek}
                         </h2>
-                        <ul className="space-y-2 mt-3 w-full">
+                        <ul className="space-y-4 w-full pl-14 ">
                             {logs.map((log) => (
-                                <li key={log.id} className="w-full border-b border-neutral-200 ">
+                                <li key={log.id} className=" border-b border-neutral-200 ">
                                     {/* Render task details here */}
-                                    <div className="min-h-[55px] flex items-center gap-x-2  py-2 w-full">
-                                        <div className="relative">
-                                            <Image
+                                    <div className=" flex items-center gap-x-2  py-2 w-full min-w-0">
+                                        {/* <div className="relative w-[40px] h-[40px]"> */}
+                                        {/* <Image
                                                 src={log.userImage}
                                                 alt={`${log.userName}'s avatar`}
-                                                width={50}
-                                                height={50}
+                                                fill
                                                 className="object-cover rounded-full"
-                                            />
+                                            /> */}
 
-                                            <div className="absolute bottom-0 right-0 z-30 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                                        {/* <div className="absolute bottom-0 right-0 z-30 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
                                                 <Check className="w-3 h-3 text-white " />
-                                            </div>
-                                        </div>
+                                            </div> */}
+                                        {/* </div> */}
 
                                         <div className="space-y-2">
-                                            <p className="text-sm font-thin">
+                                            <p className="text-sm font-thin break-words whitespace-normal">
                                                 <span className="font-medium">{log.userName} </span>
+                                                {/* Completed or Updated that's why d */}
                                                 {log.action.toLowerCase()}d a task:{" "}
-                                                <span className="text-neutral-400">
+                                                <span className="text-neutral-400 ">
                                                     {log.taskTitle}
                                                 </span>
                                             </p>

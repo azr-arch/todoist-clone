@@ -98,3 +98,15 @@ export const generateMoreDates = (page: number, daysPerPage = 30) => {
 
     return dates;
 };
+
+export const getDaysOfWeek = (date: Date) => {
+    // First get the start of week
+    const startOfWeek = new Date(date);
+    startOfWeek.setDate(date.getDate() - date.getDay() + 1);
+
+    return Array.from({ length: 7 }, (_, idx) => {
+        const day = new Date(startOfWeek);
+        day.setDate(startOfWeek.getDate() + idx);
+        return day;
+    });
+};

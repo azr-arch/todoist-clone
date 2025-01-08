@@ -8,6 +8,7 @@ import { SectionContainer } from "./_components/section-container";
 import Image from "next/image";
 import { fetchTasks } from "@/lib/task-fetcher";
 import { currentUser } from "@clerk/nextjs/server";
+import { PageLayout } from "@/components/layout/page-layout";
 
 const InboxPage = async () => {
     const user = await currentUser();
@@ -31,28 +32,24 @@ const InboxPage = async () => {
     });
 
     return (
-        <div className="h-full">
-            {/* <div className="w-full"> */}
-            <div className="mb-10 px-5">
-                <h1 className="text-3xl font-semibold hover:outline hover:outline-1 outline-neutral-200 rounded-md ">
-                    Inbox
-                </h1>
-            </div>
-            <div className="px-4">
-                <TaskList data={tasks} className="h-fit gap-0" />
-                <AddTaskButton />
-            </div>
+        <PageLayout title="Inbox">
+            {
+                <>
+                    <div className="px-4">
+                        <TaskList data={tasks} className="h-fit gap-0" />
+                        <AddTaskButton />
+                    </div>
 
-            {/* Add a new section button */}
-            <div className="my-1">
-                <AddSectionBtn prevOrder={0} />
-            </div>
+                    {/* Add a new section button */}
+                    <div className="my-1">
+                        <AddSectionBtn prevOrder={0} />
+                    </div>
+                    {!tasks || (tasks.length <= 0 && <EmptyLists />)}
 
-            {!tasks || (tasks.length <= 0 && <EmptyLists />)}
-            {/* </div> */}
-
-            <SectionContainer data={sections} />
-        </div>
+                    <SectionContainer data={sections} />
+                </>
+            }
+        </PageLayout>
     );
 };
 

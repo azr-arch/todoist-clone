@@ -29,6 +29,7 @@ export async function fetchTasks({
         where: {
             clerkUserId: user.id,
             isCompleted: isCompleted,
+            sectionId: undefined,
         },
         orderBy: {
             order: "asc",

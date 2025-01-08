@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { generateInitialDates } from "@/lib/utils";
 import { FullTask } from "@/lib/types";
 import { TaskWithDate } from "./upcoming-list-item";
+import { CalendarWeeks } from "./calendar-weeks";
 
 interface UpcomingListProps {
     data?: Task[];
@@ -41,6 +42,7 @@ export const UpcomingList = ({ data }: UpcomingListProps) => {
 
     return (
         <div className="w-full  ">
+            <CalendarWeeks />
             {/* {dates.map((date) => (
                 // <TaskWithDate key={date} date={date} tasks={} />
             ))} */}

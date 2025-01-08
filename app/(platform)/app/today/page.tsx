@@ -6,6 +6,7 @@ import Image from "next/image";
 import { CheckCircle } from "lucide-react";
 import { getStartAndEndOfDay } from "@/lib/utils";
 import { fetchTasks } from "@/lib/task-fetcher";
+import { PageLayout } from "@/components/layout/page-layout";
 
 const TodayPage = async () => {
     const { startOfDay, endOfDay } = getStartAndEndOfDay();
@@ -16,20 +17,7 @@ const TodayPage = async () => {
     });
 
     return (
-        <div className="h-full">
-            <div className="mb-10">
-                <h1 className="text-3xl font-semibold hover:outline hover:outline-1 outline-neutral-200 rounded-md">
-                    Today
-                </h1>
-                {tasks.length > 0 && (
-                    <span className="text-neutral-500 text-sm font-thin flex items-center gap-x-1 mt-2 px-1">
-                        <CheckCircle className="size-3" />
-                        <span>{tasks.length}</span>
-                        task
-                    </span>
-                )}
-            </div>
-
+        <PageLayout title="Today" taskCount={tasks.length}>
             <div className="relative">
                 <OverdueList data={overdueTasks} />
                 <TaskList
@@ -42,7 +30,7 @@ const TodayPage = async () => {
                 {/* Empty Page */}
                 {overdueTasks.length <= 0 && tasks.length <= 0 ? <EmptyLists /> : null}
             </div>
-        </div>
+        </PageLayout>
     );
 };
 

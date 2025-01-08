@@ -124,3 +124,28 @@
         z-index: -5000;
     }
 }
+
+/* For webkit-based browsers (Chrome, Edge, Safari) */
+.scroll-style::-webkit-scrollbar {
+    width: 1px; /* Scrollbar width */
+}
+
+.scroll-style::-webkit-scrollbar-thumb {
+    background-color: #737373; /* Neutral-500 color */
+}
+
+.scroll-style::-webkit-scrollbar-track {
+    background-color: transparent; /* Optional: transparent track */
+}
+
+.scroll-style::-webkit-scrollbar-button {
+    display: none; /* Remove top and bottom arrows */
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin; /* Reduces scrollbar width */
+    scrollbar-color: #737373 transparent; /* Thumb color and track color */
+    /* scrollbar-arrow-color: white; */
+    scroll-behavior: smooth;
+}
