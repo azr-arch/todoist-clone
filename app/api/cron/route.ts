@@ -3,7 +3,7 @@ import { sendEmail } from "@/lib/email";
 import { Task } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-export async function POST() {
+export async function GET() {
     try {
         const today = new Date();
         const formattedDate = today.toLocaleDateString("en-US", {
@@ -73,6 +73,6 @@ export async function POST() {
         return NextResponse.json({ success: true, message: "Sent email to user successfully" });
     } catch (error) {
         console.error("[CRON_JOB]: ", error);
-        return new NextResponse("Error sending notification to user");
+        return new NextResponse("Error sending notification to user", { status: 500 });
     }
 }
