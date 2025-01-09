@@ -39,6 +39,7 @@ export async function GET() {
         for (const [userEmail, tasks] of Object.entries(userEmailToTaskMap)) {
             const taskCount = tasks.length;
 
+            // TODO Implement styling
             const emailContent = `
                     <h1>Tasks for ${formattedDate} -> ${taskCount} overdue</h1>
                     <p>You have no task due today, but you do have ${taskCount} overdue task</p>
