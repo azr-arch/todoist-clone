@@ -3,7 +3,7 @@ import Mail from "nodemailer/lib/mailer";
 
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
-    port: parseInt(process.env.EMAIL_PORT || "587"),
+    port: parseInt(process.env.EMAIL_PORT || "2525"),
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -11,10 +11,14 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function sendEmail(to: string, subject: string, html: string) {
-    await transporter.sendMail({
-        from: process.env.EMAIL_FROM,
-        to,
-        subject,
-        html,
-    });
+    try {
+        await transporter.sendMail({
+            from: process.env.EMAIL_FROM,
+            to,
+            subject,
+            html,
+        });
+    } catch (error) {
+        console.log("nodemailer error: ", error);
+    }
 }
