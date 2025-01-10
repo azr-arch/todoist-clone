@@ -4,6 +4,7 @@ import { FilterList } from "./_components/filter-list";
 import { LabelList } from "./_components/label-list";
 import { Filter, Label } from "@prisma/client";
 import { currentUser } from "@clerk/nextjs/server";
+import { PageLayout } from "@/components/layout/page-layout";
 
 const FiltersAndLabelsPage = async () => {
     let labels: Label[];
@@ -36,18 +37,12 @@ const FiltersAndLabelsPage = async () => {
     }
 
     return (
-        <div className="h-full">
-            <div className="mb-10 ">
-                <h1 className="text-3xl font-semibold hover:outline hover:outline-1 outline-neutral-200 rounded-md ">
-                    Filters & labels
-                </h1>
-            </div>
-
+        <PageLayout title="Filters & labels">
             <div className="space-y-6">
                 <FilterList data={filters} />
                 <LabelList data={labels} />
             </div>
-        </div>
+        </PageLayout>
     );
 };
 

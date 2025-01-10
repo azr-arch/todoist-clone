@@ -6,6 +6,7 @@ import { AddSectionBtn } from "../../inbox/_components/add-section-btn";
 import { SectionContainer } from "../../inbox/_components/section-container";
 import { EmptyTasks } from "@/components/empty-tasks";
 import { currentUser } from "@clerk/nextjs/server";
+import { PageLayout } from "@/components/layout/page-layout";
 
 const ProjectUrlPage = async ({ params }: { params: { projectUrl: string } }) => {
     const [projectName, projectId] = params.projectUrl.split("_");
@@ -52,13 +53,7 @@ const ProjectUrlPage = async ({ params }: { params: { projectUrl: string } }) =>
     }
 
     return (
-        <div className="h-full">
-            <div className="mb-4 ">
-                <h1 className="text-2xl font-semibold hover:outline hover:outline-1 outline-neutral-200 rounded-md ">
-                    {formattedName}
-                </h1>
-            </div>
-
+        <PageLayout title={formattedName}>
             <div></div>
 
             <div className="my-8">
@@ -79,7 +74,7 @@ const ProjectUrlPage = async ({ params }: { params: { projectUrl: string } }) =>
             {sections && sections.length > 0 ? <SectionContainer data={sections} /> : null}
 
             {!project?.tasks || project?.tasks.length <= 0 ? <EmptyTasks /> : null}
-        </div>
+        </PageLayout>
     );
 };
 

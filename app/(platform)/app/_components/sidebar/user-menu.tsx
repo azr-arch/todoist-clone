@@ -51,9 +51,8 @@ export const UserMenu = () => {
                     sideOffset={10}
                     className="w-[281px] bg-white shadow-menu rounded-md px-1 py-2"
                 >
-                    {/* Loop over menu items to render Menu item  */}
+                    {/* Loop over menu items to render Menu item */}
                     {USER_MENU_ITEMS.map((item, idx) => {
-                        // Reimplement with switch ??
                         if (item.separator) {
                             return <MenubarSeparator key={idx} className="my-2" />;
                         }
@@ -68,7 +67,7 @@ export const UserMenu = () => {
                         );
                     })}
 
-                    {/* Todo: bug when logout (page not found error ) */}
+                    {/* Todo: bug when logout (page not found error) */}
                     <MenubarItem>
                         <SignOutButton redirectUrl="/">
                             <Button

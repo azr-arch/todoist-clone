@@ -4,6 +4,7 @@ import { fetchTasks } from "@/lib/task-fetcher";
 import { Calendar } from "lucide-react";
 import { CustomCalendar } from "@/components/custom-calendar";
 import { UpcomingCalendar } from "./_components/upcoming-calendar";
+import { PageLayout } from "@/components/layout/page-layout";
 
 const UpcomingPage = async () => {
     const { tasks: upcomingTasks } = await fetchTasks({

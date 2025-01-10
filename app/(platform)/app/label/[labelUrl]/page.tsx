@@ -5,6 +5,7 @@ import { Label } from "@prisma/client";
 import { TaskItem } from "../../_components/task-item";
 import { TaskList } from "../../_components/tasklist";
 import { currentUser } from "@clerk/nextjs/server";
+import { PageLayout } from "@/components/layout/page-layout";
 
 const LabelUrlPage = async ({ params }: { params: { labelUrl: string } }) => {
     const [labelName, labelId] = params.labelUrl.split("_");
@@ -47,13 +48,7 @@ const LabelUrlPage = async ({ params }: { params: { labelUrl: string } }) => {
     }
 
     return (
-        <div className="h-full">
-            <div className="mb-4 ">
-                <h1 className="text-2xl font-semibold hover:outline hover:outline-1 outline-neutral-200 rounded-md ">
-                    {formattedName}
-                </h1>
-            </div>
-
+        <PageLayout title={formattedName}>
             {label?.tasks && label.tasks.length > 0 ? (
                 <TaskList data={label.tasks.map((item) => item.task)} />
             ) : null}
@@ -61,7 +56,7 @@ const LabelUrlPage = async ({ params }: { params: { labelUrl: string } }) => {
             <div>
                 <AddTaskButton labelId={labelId} />
             </div>
-        </div>
+        </PageLayout>
     );
 };
 
