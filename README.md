@@ -48,10 +48,6 @@ TodoVex is a clone of the Todoist app, aiming to replicate most of its features.
 
 Feel free to fork the repository and submit pull requests. Any contributions are welcome!
 
-## Reporting Bugs
-
-If you encounter any bugs, please report them by opening an issue on GitHub.
-
 ## Disclaimer
 
 This project is for educational purposes only. It is not intended for commercial use and is not affiliated with or endorsed by Todoist.
