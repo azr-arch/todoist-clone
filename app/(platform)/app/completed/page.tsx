@@ -20,7 +20,7 @@ export default async function CompletedPage() {
 
     return (
         <div className="px-4">
-            <span className="text-xs text-neutral-400">
+            <span className="text-xs text-neutral-400 block md:hidden">
                 This page has UI issues (working on it), use it on desktop
             </span>
             <List data={logs} />
@@ -49,7 +49,7 @@ function List({ data }: { data: AuditLog[] }) {
 
     return (
         <div className=" w-full ">
-            {!groupedTasks && <p>Nothings here</p>}
+            {!groupedTasks && <p>Nothing`s here</p>}
 
             {Object.entries(groupedTasks).map(([date, logs]) => {
                 const formattedDate = new Date(date).toLocaleDateString("en-US", {
@@ -67,30 +67,30 @@ function List({ data }: { data: AuditLog[] }) {
                             <span className="mx-4 w-1.5 h-1.5 rounded-full bg-neutral-300" />
                             {dayOfWeek}
                         </h2>
-                        <ul className="space-y-4 w-full pl-14 ">
+                        <ul className="space-y-4 w-full  ">
                             {logs.map((log) => (
                                 <li key={log.id} className=" border-b border-neutral-200 ">
                                     {/* Render task details here */}
-                                    <div className=" flex items-center gap-x-2  py-2 w-full min-w-0">
-                                        {/* <div className="relative w-[40px] h-[40px]"> */}
-                                        {/* <Image
+                                    <div className=" grid grid-cols-[40px_1fr] gap-6  py-2 w-full min-w-0">
+                                        <div className="relative size-[40px]">
+                                            <Image
                                                 src={log.userImage}
                                                 alt={`${log.userName}'s avatar`}
                                                 fill
                                                 className="object-cover rounded-full"
-                                            /> */}
+                                            />
 
-                                        {/* <div className="absolute bottom-0 right-0 z-30 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                                            <div className="absolute bottom-0 right-0 z-30 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
                                                 <Check className="w-3 h-3 text-white " />
-                                            </div> */}
-                                        {/* </div> */}
+                                            </div>
+                                        </div>
 
                                         <div className="space-y-2">
                                             <p className="text-sm font-thin break-words whitespace-normal">
                                                 <span className="font-medium">{log.userName} </span>
                                                 {/* Completed or Updated that's why d */}
                                                 {log.action.toLowerCase()}d a task:{" "}
-                                                <span className="text-neutral-400 ">
+                                                <span className="text-neutral-400 line-clamp-2">
                                                     {log.taskTitle}
                                                 </span>
                                             </p>

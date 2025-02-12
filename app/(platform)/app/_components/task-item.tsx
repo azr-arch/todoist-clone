@@ -57,6 +57,7 @@ export const TaskItem = ({
             toast("Task deleted", {
                 description: "Task deleted successfully.",
             });
+            setOpen(false);
         } catch (error) {
             toast("Error occured", {
                 description: "Make sure Task is not already deleted.",

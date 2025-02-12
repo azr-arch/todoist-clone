@@ -10,7 +10,7 @@ import { fetchTasks } from "@/lib/task-fetcher";
 import { currentUser } from "@clerk/nextjs/server";
 import { PageLayout } from "@/components/layout/page-layout";
 
-const InboxPage = async () => {
+export default async function InboxPage() {
     const user = await currentUser();
 
     const { tasks, overdueTasks } = await fetchTasks({
@@ -33,27 +33,21 @@ const InboxPage = async () => {
 
     return (
         <PageLayout title="Inbox">
-            {
-                <>
-                    <div className="px-4">
-                        <TaskList data={tasks} className="h-fit gap-0" />
-                        <AddTaskButton />
-                    </div>
+            <div className="px-4">
+                <TaskList data={tasks} className="h-fit gap-0" />
+                <AddTaskButton />
+            </div>
 
-                    {/* Add a new section button */}
-                    <div className="my-1">
-                        <AddSectionBtn prevOrder={0} />
-                    </div>
-                    {!tasks || (tasks.length <= 0 && <EmptyLists />)}
+            {/* Add a new section button */}
+            <div className="my-1">
+                <AddSectionBtn prevOrder={0} />
+            </div>
+            {!tasks || (tasks.length <= 0 && <EmptyLists />)}
 
-                    <SectionContainer data={sections} />
-                </>
-            }
+            <SectionContainer data={sections} />
         </PageLayout>
     );
-};
-
-export default InboxPage;
+}
 
 function EmptyLists() {
     return (
